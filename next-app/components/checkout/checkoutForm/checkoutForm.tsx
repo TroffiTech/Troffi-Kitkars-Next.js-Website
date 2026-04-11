@@ -1,4 +1,3 @@
-// CheckoutForm.tsx
 import { useDispatch, useSelector } from "react-redux";
 import styles from "./checkoutForm.module.scss";
 import { useRouter } from "next/navigation";
@@ -49,7 +48,7 @@ export default function CheckoutForm() {
 		debounce((data: CheckoutFormData) => {
 			if (isDirty) saveFormData(data);
 		}, 500),
-		[isDirty]
+		[isDirty],
 	);
 
 	const formData = watch();
@@ -112,7 +111,7 @@ export default function CheckoutForm() {
 			const { formatted, newCursorPosition: adjustedPosition } = handlePhoneChange(
 				newValue,
 				newCursorPosition,
-				true // Флаг backspace
+				true, // Флаг backspace
 			);
 
 			// Устанавливаем сырое значение в форму

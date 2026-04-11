@@ -9,7 +9,7 @@ export default async function readCategoriesThreeFile() {
 		const filePath = path.join(CONTENT_PATH, CATEGORIES_FILE);
 		const content = await fs.readFile(filePath, "utf-8");
 		return JSON.parse(content);
-	} catch (error) {
+	} catch {
 		console.error("Categories file not found");
 		return [];
 	}
