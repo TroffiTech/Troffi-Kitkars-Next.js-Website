@@ -1,7 +1,15 @@
 import { Manrope } from "next/font/google";
 import type { Metadata } from "next";
 import "./globals.css";
+import fs from "fs";
+import path from "path";
+import dotenv from "dotenv";
 import YandexMetrikaContainer from "@/components/yandexMetrika/yandexMetrika";
+
+const envPath = path.join(process.cwd(), ".env");
+if (fs.existsSync(envPath)) {
+	dotenv.config({ path: envPath });
+}
 
 const montserratSans = Manrope({
 	variable: "--font-montserrat-sans",
@@ -10,8 +18,8 @@ const montserratSans = Manrope({
 });
 
 export const metadata: Metadata = {
-	title: `${process.env.SITE_NAME}`,
-	description: `Запчасти для тюнинга ${process.env.SITE_NAME} в Москве по доступным ценам! Звоните ☎️${process.env.MAIN_TEL}`,
+	title: `${process.env.SITE_NAME || "Запчасти для азиатских автомобилей"}`,
+	description: `Отечесвенные запчасти для тюнинга азиатских внедорожников по доступным ценам! Звоните ☎️${process.env.MAIN_TEL || "+7 (922) 520-77-71"}`,
 };
 
 export default function RootLayout({
@@ -26,7 +34,7 @@ export default function RootLayout({
 				<meta name="robots" content="all" />
 				<meta
 					name="keywords"
-					content={`${process.env.SITE_NAME}, тюнинг, троффи, ${process.env.CITY_LOCATION}`}
+					content={`${process.env.SITE_NAME}, тюнинг, троффи, ${process.env.CITY_LOCATION || "Ижевск"}`}
 				/>
 			</head>
 			<body className={`${montserratSans.className}`}>

@@ -54,12 +54,12 @@ function ModalDescriptionContent() {
 
 				<div className={styles.upperInner}>
 					<a
-						href={`${process.env.DOMEN}/catalog/product/${decodeURIComponent(productData.sku!)}`}
+						href={`${process.env.DOMEN || "https://kitkars.ru"}/catalog/product/${decodeURIComponent(productData.sku!)}`}
 						className={styles.productLink}
 						target="_blank"
 						rel="noopener noreferrer"
 					>
-						{`${process.env.DOMEN}/catalog/product/${decodeURIComponent(productData.sku!)}`}
+						{`${process.env.DOMEN || "https://kitkars.ru"}/catalog/product/${decodeURIComponent(productData.sku!)}`}
 					</a>
 					<ImageCarousel images={productData.images} />
 				</div>

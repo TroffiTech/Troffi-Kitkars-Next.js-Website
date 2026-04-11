@@ -13,7 +13,7 @@ export default function ContactsInfo() {
 				</ul>
 			))}
 			<h2>Адрес:</h2>
-			<p>{process.env.ADDRESS}</p>
+			<p>{process.env.ADDRESS || "Ижевск, пер.Спартаковский, д. 8"}</p>
 
 			<h2>Реквизиты компании ООО «ВИП»</h2>
 			<p>

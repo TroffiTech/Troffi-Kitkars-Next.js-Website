@@ -7,17 +7,18 @@ export default function generateBitrixLeadFields(
 ) {
 	function generateLeadTitle() {
 		if (!name && !totalPrice)
-			return `Запрос на регистрацию изменений в ТС с сайта ${process.env.DOMEN}`;
-		else if (!totalPrice) return `Запрос на консультацию по товару с сайта ${process.env.DOMEN}`;
-		else return `Заказ с сайта ${process.env.DOMEN}`;
+			return `Запрос на регистрацию изменений в ТС с сайта ${process.env.DOMEN || "https://kitkars.ru"}`;
+		else if (!totalPrice)
+			return `Запрос на консультацию по товару с сайта ${process.env.DOMEN || "https://kitkars.ru"}`;
+		else return `Заказ с сайта ${process.env.DOMEN || "https://kitkars.ru"}`;
 	}
 
 	const leadFields = {
 		fields: {
 			ADDRESS_CITY: deliveryAddress,
 			COMMENTS: additionalInfo,
-			HONORIFIC: `${process.env.DOMEN}`,
-			SOURCE_DESCRIPTION: `${process.env.DOMEN}`,
+			HONORIFIC: `${process.env.DOMEN || "https://kitkars.ru"}`,
+			SOURCE_DESCRIPTION: `${process.env.DOMEN || "https://kitkars.ru"}`,
 			TITLE: generateLeadTitle(),
 			NAME: name,
 			OPPORTUNITY: totalPrice,
