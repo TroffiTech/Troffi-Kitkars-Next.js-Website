@@ -7,20 +7,20 @@ import SideSlideWidget from "@/components/shared/sideSlideWidget/sideSlideWidget
 import Footer from "@/components/shared/footer/Footer";
 
 export default function Catalog() {
-    return (
-        <main>
-            <section className='flex-box__column'>
-                <Header />
-                <ReduxStoreProvider>
-                    <SmallPopupProvider>
-                        <ModalDescriptionProvider>
-                            <DefaultFeed />
-                        </ModalDescriptionProvider>
-                    </SmallPopupProvider>
-                    <SideSlideWidget />
-                </ReduxStoreProvider>
-                <Footer />
-            </section>
-        </main>
-    );
+	return (
+		<main>
+			<section className="flex-box__column">
+				<Header />
+				<ReduxStoreProvider>
+					<SmallPopupProvider>
+						<ModalDescriptionProvider>
+							<DefaultFeed />
+						</ModalDescriptionProvider>
+					</SmallPopupProvider>
+					<SideSlideWidget />
+				</ReduxStoreProvider>
+				<Footer />
+			</section>
+		</main>
+	);
 }

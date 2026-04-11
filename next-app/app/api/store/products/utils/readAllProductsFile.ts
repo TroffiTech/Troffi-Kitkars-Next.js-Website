@@ -1,24 +1,16 @@
-import { getCachedOrRead } from "@/app/api/utils/contentCache";
-import { getFilePath } from "@/app/api/utils/getContentPaths";
-import { Product } from "@/types/productsType";
-import { promises as fs } from "fs";
+import fs from "fs/promises";
+import path from "path";
 
-const filePath = getFilePath("allProducts.json");
+const CONTENT_PATH = process.env.CONTENT_PATH || "/app/content";
+const PRODUCTS_FILE = "allProducts.json";
 
-async function readProductsFromDisk(): Promise<Product[]> {
-	const fileContents = await fs.readFile(filePath, "utf8");
-	const allProducts: Product[] = JSON.parse(fileContents);
-
-	return allProducts.filter(
-		(item: Product) =>
-			item && typeof item === "object" && "status" in item && item.status === "publish",
-	);
-}
-
-export async function readAllProductsFile(): Promise<Product[]> {
+export default async function readCategoriesThreeFile() {
 	try {
-		return await getCachedOrRead(filePath, readProductsFromDisk);
+		const filePath = path.join(CONTENT_PATH, PRODUCTS_FILE);
+		const content = await fs.readFile(filePath, "utf-8");
+		return JSON.parse(content);
 	} catch (error) {
-		throw new Error("Function readAllProductsFile failed: " + error);
+		console.error("Products file not founds");
+		return [];
 	}
 }

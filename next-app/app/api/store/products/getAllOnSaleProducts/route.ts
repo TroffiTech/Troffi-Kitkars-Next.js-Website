@@ -1,5 +1,5 @@
 import { getQueries } from "@/app/api/utils/readQueries";
-import { readAllProductsFile } from "../utils/readAllProductsFile";
+import readAllProductsFile from "../utils/readAllProductsFile";
 import findOnSaleProducts from "../utils/findOnSaleProducts";
 
 export async function GET(req: Request) {
@@ -7,8 +7,8 @@ export async function GET(req: Request) {
 	const page: number = +queries.page;
 	const sortOrder = queries.order;
 
-	const allProducts = (await readAllProductsFile())?.sort((a, b) =>
-		sortOrder === "increase" ? +a.price - +b.price : +b.price - +a.price
+	const allProducts = (await readAllProductsFile())?.sort((a: any, b: any) =>
+		sortOrder === "increase" ? +a.price - +b.price : +b.price - +a.price,
 	);
 
 	if (!allProducts) throw new Error("Endpoint: Failed to read allProducts.json");

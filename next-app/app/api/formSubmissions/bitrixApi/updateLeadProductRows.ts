@@ -8,7 +8,7 @@ export const updateLeadProductRows = async (id: number, productRows: string) => 
 					"content-type": "application/json",
 				},
 				body: productRows,
-			}
+			},
 		);
 		return res.json();
 	} catch (error) {

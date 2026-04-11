@@ -14,7 +14,7 @@ export function generateBitrixProductsFields(cart: ProductInCart[]) {
 		bitrixProductRows.push({
 			PRODUCT_ID: item.id.toString(),
 			PRODUCT_NAME: `${process.env.NEXT_PUBLIC_DOMEN}/catalog/product/${decodeURIComponent(
-				item.sku
+				item.sku,
 			)}`,
 			PRICE: item.price,
 			QUANTITY: item.quantity,

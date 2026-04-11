@@ -6,18 +6,18 @@ import CookiePopup from "@/components/shared/popups/cookiePopup/cookiePopup";
 import Footer from "@/components/shared/footer/Footer";
 
 export default function Cart() {
-    return (
-        <main>
-            <section className='flex-box__column'>
-                <Header />
-                <ReduxStoreProvider>
-                    <SmallPopupProvider>
-                        <CartFeed />
-                    </SmallPopupProvider>
-                    <CookiePopup />
-                </ReduxStoreProvider>
-                <Footer />
-            </section>
-        </main>
-    );
+	return (
+		<main>
+			<section className="flex-box__column">
+				<Header />
+				<ReduxStoreProvider>
+					<SmallPopupProvider>
+						<CartFeed />
+					</SmallPopupProvider>
+					<CookiePopup />
+				</ReduxStoreProvider>
+				<Footer />
+			</section>
+		</main>
+	);
 }

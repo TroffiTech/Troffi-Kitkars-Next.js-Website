@@ -1,4 +1,4 @@
-import { readAllProductsFile } from "@/app/api/store/products/utils/readAllProductsFile";
+import readAllProductsFile from "@/app/api/store/products/utils/readAllProductsFile";
 import Footer from "@/components/shared/footer/Footer";
 import Header from "@/components/shared/header/Header";
 
@@ -13,7 +13,7 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
 	if (!allProducts) throw new Error("Endpoint: Failed to read allProducts.json");
 
 	const productData = allProducts.filter(
-		(item) => decodeURIComponent(item.sku!) === decodeURIComponent(slug)
+		(item: any) => decodeURIComponent(item.sku!) === decodeURIComponent(slug),
 	)[0];
 	if (!productData) redirect("/not-found");
 	return (

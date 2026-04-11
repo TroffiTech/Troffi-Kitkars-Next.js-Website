@@ -1,20 +1,16 @@
-import { getCachedOrRead } from "@/app/api/utils/contentCache";
-import { getFilePath } from "@/app/api/utils/getContentPaths";
-import { CategoriesThree } from "@/types/productsType";
-import { promises as fs } from "fs";
+import fs from "fs/promises";
+import path from "path";
 
-const filePath = getFilePath("categoriesThree.json");
-
-async function readCategoriesFromDisk() {
-	const fileContents = await fs.readFile(filePath, "utf8");
-	return JSON.parse(fileContents) as CategoriesThree;
-}
+const CONTENT_PATH = process.env.CONTENT_PATH || "/app/content";
+const CATEGORIES_FILE = "categoriesThree.json";
 
 export default async function readCategoriesThreeFile() {
 	try {
-		return await getCachedOrRead(filePath, readCategoriesFromDisk);
+		const filePath = path.join(CONTENT_PATH, CATEGORIES_FILE);
+		const content = await fs.readFile(filePath, "utf-8");
+		return JSON.parse(content);
 	} catch (error) {
-		console.error("Error while reading categoriesThree.json:", error);
-		throw error;
+		console.error("Categories file not found");
+		return [];
 	}
 }

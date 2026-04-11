@@ -1,5 +1,5 @@
 import { Product } from "@/types/productsType";
-import { readAllProductsFile } from "./readAllProductsFile";
+import readAllProductsFile from "./readAllProductsFile";
 
 export function levenstainDistance(a: string, b: string) {
 	// create matrix
@@ -18,7 +18,7 @@ export function levenstainDistance(a: string, b: string) {
 			matrix[j][i] = Math.min(
 				matrix[j][i - 1] + 1, // Deleting
 				matrix[j - 1][i] + 1, // Inserting
-				matrix[j - 1][i - 1] + cost // Switching
+				matrix[j - 1][i - 1] + cost, // Switching
 			);
 		}
 	}
@@ -32,7 +32,7 @@ export default async function fuzzySearch(stringToSearch: string) {
 
 	if (!data) throw new Error("Endpoint: Failed to read allProducts.json");
 	// sku search
-	data.map((item) => {
+	data.map((item: any) => {
 		if (item.sku.startsWith(stringToSearch) || item.sku.includes(stringToSearch))
 			result.push({ ...item, nameSimilarityRate: 1000 });
 	});
@@ -40,7 +40,7 @@ export default async function fuzzySearch(stringToSearch: string) {
 	// fuzzy search
 	const queryWords = stringToSearch.split(" ");
 
-	data.map((product) => {
+	data.map((product: any) => {
 		let nameSimilarityRate = 0;
 
 		const nameWords = product.name.split(" ");

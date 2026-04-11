@@ -1,4 +1,4 @@
-import { readAllProductsFile } from "../utils/readAllProductsFile";
+import readAllProductsFile from "../utils/readAllProductsFile";
 
 export async function GET() {
 	const data = await readAllProductsFile();

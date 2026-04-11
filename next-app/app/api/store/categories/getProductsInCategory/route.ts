@@ -1,4 +1,4 @@
-import { readAllProductsFile } from "../../products/utils/readAllProductsFile";
+import readAllProductsFile from "../../products/utils/readAllProductsFile";
 import readCategoriesThreeFile from "../utils/readCategoriesThreeFile";
 import { getQueries } from "@/app/api/utils/readQueries";
 import { Category, Product } from "@/types/productsType";
@@ -60,7 +60,7 @@ export async function GET(req: Request) {
 	const { category, page, order } = queries;
 
 	const categoriesThree = await readCategoriesThreeFile();
-	const allProducts = (await readAllProductsFile())?.sort((a, b) =>
+	const allProducts = (await readAllProductsFile())?.sort((a: any, b: any) =>
 		order === "increase" ? +a.price - +b.price : +b.price - +a.price,
 	);
 
@@ -92,16 +92,16 @@ export async function GET(req: Request) {
 	const data: Product[] = [];
 
 	for (const product of allProducts) {
-		const productCategoryIds = product.categories.map((category) => category.id);
+		const productCategoryIds = product.categories.map((category: Category) => category.id);
 
 		let carMatch = true;
 		if (carCategories.length > 0) {
-			carMatch = productCategoryIds.some((id) => carCategories.includes(id));
+			carMatch = productCategoryIds.some((id: number) => carCategories.includes(id));
 		}
 
 		let productMatch = true;
 		if (productCategories.length > 0) {
-			productMatch = productCategoryIds.some((id) => productCategories.includes(id));
+			productMatch = productCategoryIds.some((id: number) => productCategories.includes(id));
 		}
 
 		if (carMatch && productMatch) {

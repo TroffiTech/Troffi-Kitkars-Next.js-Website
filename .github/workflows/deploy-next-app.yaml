@@ -73,7 +73,7 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: ${{ secrets.SSH_PORT || '22' }}
           source: "updater-scripts/."
-          target: "/var/www/periphery/shared-scripts/"
+          target: "/var/www/kitkars/shared-scripts/"
           strip_components: 0
           overwrite: true
 
@@ -91,7 +91,7 @@ jobs:
 
             # Явно задаем переменные с правильным именем
             REGISTRY="ghcr.io"
-            REPO="troffitech/troffi-common-next.js-app"
+            REPO="troffitech/troffi-kitkars-next.js-app"
             IMAGE="next-app"
             FULL_IMAGE="${REGISTRY}/${REPO}/${IMAGE}:latest"
 
@@ -104,9 +104,9 @@ jobs:
 
             # Проверяем, что скрипты скопировались (опционально)
             echo "📋 Checking updater scripts..."
-            if [ -d "/var/www/periphery/shared-scripts" ]; then
+            if [ -d "/var/www/kitkars/shared-scripts" ]; then
               echo "✅ Scripts directory exists"
-              ls -la /var/www/periphery/shared-scripts/
+              ls -la /var/www/kitkars/shared-scripts/
             else
               echo "⚠️ Scripts directory not found"
             fi
@@ -114,24 +114,16 @@ jobs:
             # Перезапускаем все контейнеры с новым образом (с учетом регионов)
             echo "🔄 Restarting all containers..."
 
-            # Проходим по всем регионам (msk, spb, и т.д.)
-            for REGION_DIR in /var/www/periphery/*/; do
-              if [ -d "${REGION_DIR}" ]; then
-                REGION_NAME=$(basename $REGION_DIR)
-                echo "  📍 Processing region: $REGION_NAME"
+            # Проходим по всем регионам 
+            for REGION_DIR in /var/www/kitkars/*; do
+              if [ -f "${SITE_DIR}docker-compose.yml" ]; then
+                SITE_NAME=$(basename $SITE_DIR)
+                echo "    - Restarting $REGION_NAME/$SITE_NAME"
                 
-                # Проходим по всем сайтам в регионе
-                for SITE_DIR in ${REGION_DIR}*/; do
-                  if [ -f "${SITE_DIR}docker-compose.yml" ]; then
-                    SITE_NAME=$(basename $SITE_DIR)
-                    echo "    - Restarting $REGION_NAME/$SITE_NAME"
-                    
-                    cd $SITE_DIR
-                    docker compose down
-                    docker compose up -d --force-recreate
-                    cd - > /dev/null
-                  fi
-                done
+                cd $SITE_DIR
+                docker compose down
+                docker compose up -d --force-recreate
+                cd - > /dev/null
               fi
             done
 

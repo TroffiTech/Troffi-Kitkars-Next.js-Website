@@ -11,7 +11,7 @@ export async function GET(req: Request) {
 
 	if (!categoriesThree) throw new Error("Endpoint: Failed to read categoriesTree");
 
-	categoriesThree.map((parentCategory) => {
+	categoriesThree.map((parentCategory: any) => {
 		if (parentCategory.slug === category) {
 			currentCategoryName = parentCategory.name;
 			objToReturn = { ...parentCategory };

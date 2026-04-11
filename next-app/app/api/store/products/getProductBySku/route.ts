@@ -1,5 +1,5 @@
 import { getQueries } from "@/app/api/utils/readQueries";
-import { readAllProductsFile } from "../utils/readAllProductsFile";
+import readAllProductsFile from "../utils/readAllProductsFile";
 
 export async function GET(req: Request) {
 	const queries = getQueries(req.url);
@@ -9,7 +9,7 @@ export async function GET(req: Request) {
 
 	if (!data) throw new Error("Endpoint: Failed to read allProducts.json");
 
-	const productData = data.filter((item) => item.sku === productSku);
+	const productData = data.filter((item: any) => item.sku === productSku);
 
 	return new Response(JSON.stringify(productData), {
 		headers: {
