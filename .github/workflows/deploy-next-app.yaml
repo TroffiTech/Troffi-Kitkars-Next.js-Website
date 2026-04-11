@@ -1,0 +1,147 @@
+name: Build and Deploy Next.js App
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "next-app/**"
+      - "updater-scripts/**"
+      - ".github/workflows/deploy-next-app.yml"
+  workflow_dispatch:
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}/next-app
+
+jobs:
+  build-and-push:
+    name: Build and Push Docker Image
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Extract metadata for Docker
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          tags: |
+            type=raw,value=latest
+            type=sha,format=short
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: ./next-app
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+  deploy:
+    name: Deploy to Production Server
+    needs: build-and-push
+    runs-on: ubuntu-latest
+    if: success()
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # Шаг 1: Копируем скрипты обновления на сервер
+      - name: Copy updater scripts via SCP
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: ${{ secrets.SSH_PORT || '22' }}
+          source: "updater-scripts/."
+          target: "/var/www/periphery/shared-scripts/"
+          strip_components: 0
+          overwrite: true
+
+      # Шаг 2: Выполняем деплой через SSH
+      - name: Deploy via SSH
+        uses: appleboy/ssh-action@v1.0.0
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: ${{ secrets.SSH_PORT || '22' }}
+          script: |
+            #!/bin/bash
+            set -e
+
+            # Явно задаем переменные с правильным именем
+            REGISTRY="ghcr.io"
+            REPO="troffitech/troffi-common-next.js-app"
+            IMAGE="next-app"
+            FULL_IMAGE="${REGISTRY}/${REPO}/${IMAGE}:latest"
+
+            echo "🚀 Starting deployment..."
+            echo "Pulling image: $FULL_IMAGE"
+
+            # Скачиваем новый образ
+            echo "📦 Pulling latest image..."
+            docker pull "$FULL_IMAGE"
+
+            # Проверяем, что скрипты скопировались (опционально)
+            echo "📋 Checking updater scripts..."
+            if [ -d "/var/www/periphery/shared-scripts" ]; then
+              echo "✅ Scripts directory exists"
+              ls -la /var/www/periphery/shared-scripts/
+            else
+              echo "⚠️ Scripts directory not found"
+            fi
+
+            # Перезапускаем все контейнеры с новым образом (с учетом регионов)
+            echo "🔄 Restarting all containers..."
+
+            # Проходим по всем регионам (msk, spb, и т.д.)
+            for REGION_DIR in /var/www/periphery/*/; do
+              if [ -d "${REGION_DIR}" ]; then
+                REGION_NAME=$(basename $REGION_DIR)
+                echo "  📍 Processing region: $REGION_NAME"
+                
+                # Проходим по всем сайтам в регионе
+                for SITE_DIR in ${REGION_DIR}*/; do
+                  if [ -f "${SITE_DIR}docker-compose.yml" ]; then
+                    SITE_NAME=$(basename $SITE_DIR)
+                    echo "    - Restarting $REGION_NAME/$SITE_NAME"
+                    
+                    cd $SITE_DIR
+                    docker compose down
+                    docker compose up -d --force-recreate
+                    cd - > /dev/null
+                  fi
+                done
+              fi
+            done
+
+            # Чистим старые образы
+            echo "🧹 Cleaning up old images..."
+            docker image prune -f
+
+            echo "✅ Deployment completed successfully!"
+
+            # Показываем статус контейнеров
+            echo ""
+            echo "📊 Container status:"
+            docker ps --format "table {{.Names}}\t{{.Status}}\t{{.Ports}}" | grep nextjs || true
