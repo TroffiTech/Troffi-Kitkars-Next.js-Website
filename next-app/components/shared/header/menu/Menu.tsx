@@ -74,10 +74,10 @@ export function MenuPopup({
 					</div>
 					<Link
 						className={styles.menuPopup_innerContent_contacts_phoneNumber}
-						href={`tel: ${process.env.NEXT_PUBLIC_MAIN_TEL}`}
+						href={`tel: ${process.env.MAIN_TEL}`}
 						onClick={() => document.body.classList.remove("blockScroll")}
 					>
-						{process.env.NEXT_PUBLIC_MAIN_TEL}
+						{process.env.MAIN_TEL}
 					</Link>
 					<CallBackButton text="Заказать звонок" />
 				</div>

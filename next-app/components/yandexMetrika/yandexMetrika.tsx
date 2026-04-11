@@ -4,7 +4,7 @@ import React, { useCallback, useEffect } from "react";
 import ym, { YMInitializer } from "react-yandex-metrika";
 import Router from "next/router";
 
-const counterID = process.env.NEXT_PUBLIC_YANDEX_METRIKA_COUNTER_ID;
+const counterID = process.env.YANDEX_METRIKA_COUNTER_ID;
 
 type Props = {
 	enabled: boolean;
@@ -24,7 +24,7 @@ const YandexMetrikaContainer: React.FC<Props> = ({ enabled }) => {
 			}
 			ym(counterID, "hit", url);
 		},
-		[enabled]
+		[enabled],
 	);
 
 	useEffect(() => {

@@ -10,8 +10,8 @@ const montserratSans = Manrope({
 });
 
 export const metadata: Metadata = {
-	title: `${process.env.NEXT_PUBLIC_SITE_NAME}`,
-	description: `Запчасти для тюнинга ${process.env.NEXT_PUBLIC_SITE_NAME} в Москве по доступным ценам! Звоните ☎️${process.env.NEXT_PUBLIC_MAIN_TEL}`,
+	title: `${process.env.SITE_NAME}`,
+	description: `Запчасти для тюнинга ${process.env.SITE_NAME} в Москве по доступным ценам! Звоните ☎️${process.env.MAIN_TEL}`,
 };
 
 export default function RootLayout({
@@ -26,7 +26,7 @@ export default function RootLayout({
 				<meta name="robots" content="all" />
 				<meta
 					name="keywords"
-					content={`${process.env.NEXT_PUBLIC_SITE_NAME}, тюнинг, троффи, ${process.env.NEXT_PUBLIC_CITY_LOCATION}`}
+					content={`${process.env.SITE_NAME}, тюнинг, троффи, ${process.env.CITY_LOCATION}`}
 				/>
 			</head>
 			<body className={`${montserratSans.className}`}>

@@ -54,16 +54,12 @@ function ModalDescriptionContent() {
 
 				<div className={styles.upperInner}>
 					<a
-						href={`${process.env.NEXT_PUBLIC_DOMEN}/catalog/product/${decodeURIComponent(
-							productData.sku!
-						)}`}
+						href={`${process.env.DOMEN}/catalog/product/${decodeURIComponent(productData.sku!)}`}
 						className={styles.productLink}
 						target="_blank"
 						rel="noopener noreferrer"
 					>
-						{`${process.env.NEXT_PUBLIC_DOMEN}/catalog/product/${decodeURIComponent(
-							productData.sku!
-						)}`}
+						{`${process.env.DOMEN}/catalog/product/${decodeURIComponent(productData.sku!)}`}
 					</a>
 					<ImageCarousel images={productData.images} />
 				</div>
@@ -84,16 +80,14 @@ function ModalDescriptionContent() {
 						itemType="http://schema.org/Offer"
 						className={styles.priceBlock}
 					>
-						{productData.sale_price ? (
+						{productData.sale_price ?
 							<>
 								<p className={styles.sale}>{productData.sale_price} руб.</p>
 								<p className={styles.regular}>
 									<span itemProp="price">{productData.regular_price}</span> руб.
 								</p>
 							</>
-						) : (
-							<p itemProp="price">{productData.regular_price} руб.</p>
-						)}
+						:	<p itemProp="price">{productData.regular_price} руб.</p>}
 					</div>
 
 					<div className={styles.addToCartButton}>
