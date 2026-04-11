@@ -99,8 +99,8 @@ jobs:
             docker pull "$FULL_IMAGE"
 
             # Перезапускаем контейнер
-            SITE_DIR="/var/www/kitkars"
-            if [ -f "${SITE_DIR}/docker-compose.yml" ]; then
+            SITE_DIR="/var/www/kitkars/kitkars.ru"
+            if [ -f "${SITE_DIR}/docker-compose.yaml" ]; then
               echo "🔄 Restarting site in ${SITE_DIR}"
               cd "$SITE_DIR"
               docker compose down
