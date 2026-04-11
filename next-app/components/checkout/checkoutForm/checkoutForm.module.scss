@@ -1,0 +1,343 @@
+@mixin flex-col($gap, $align, $justify) {
+	display: flex;
+	flex-direction: column;
+	align-items: $align;
+	justify-content: $justify;
+	gap: $gap;
+}
+
+@mixin flex-row($gap, $align, $justify) {
+	display: flex;
+	flex-direction: row;
+	align-items: $align;
+	justify-content: $justify;
+	gap: $gap;
+}
+
+@mixin center-all {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	text-align: center;
+}
+
+@keyframes fadeIn {
+	from {
+		opacity: 0;
+		transform: scale(0.9) translateY(-20px);
+	}
+	to {
+		opacity: 1;
+		transform: scale(1) translateY(0);
+	}
+}
+
+@keyframes slideIn {
+	from {
+		opacity: 0;
+		transform: translateY(30px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+@keyframes movebeam {
+	0% {
+		background-position: 0% 50%;
+	}
+	50% {
+		background-position: 100% 50%;
+	}
+	100% {
+		background-position: 0% 50%;
+	}
+}
+
+.checkoutForm {
+	@include flex-col(2.5rem, stretch, flex-start);
+	grid-column: 1/4;
+	padding: 3rem;
+	background: var(--background-gradient);
+	backdrop-filter: blur(20px);
+	border: 1px solid rgba(0, 0, 0, 0.1);
+	border-radius: 20px;
+	// Декоративные элементы
+	position: relative;
+	overflow: hidden;
+
+	&::before {
+		content: "";
+		position: absolute;
+		top: -20%;
+		right: -15%;
+		width: 180px;
+		height: 180px;
+		background: var(--orange-color);
+		border-radius: 50%;
+		opacity: 0.08;
+		filter: blur(30px);
+	}
+
+	&::after {
+		content: "";
+		position: absolute;
+		bottom: -15%;
+		left: -10%;
+		width: 140px;
+		height: 140px;
+		background: var(--orange-color);
+		border-radius: 50%;
+		opacity: 0.06;
+		filter: blur(20px);
+	}
+
+	h2 {
+		font-size: 2.5rem;
+		font-weight: 700;
+		color: var(--background-color);
+		line-height: 1.2;
+		margin-bottom: 0.5rem;
+		animation: slideIn 0.5s ease-out 0.1s both;
+		position: relative;
+
+		&::after {
+			content: "";
+			position: absolute;
+			bottom: -12px;
+			left: 0;
+			width: 80px;
+			height: 4px;
+			background: var(--orange-color);
+			border-radius: 2px;
+		}
+
+		@media (max-width: 900px) {
+			font-size: 2rem;
+		}
+	}
+
+	.formFields {
+		@include flex-col(2rem, stretch, flex-start);
+		width: 100%;
+		max-width: 500px;
+		animation: slideIn 0.5s ease-out 0.2s both;
+	}
+
+	.inputGroup {
+		@include flex-col(0.8rem, stretch, flex-start);
+		width: 100%;
+
+		label {
+			font-size: 0.95rem;
+			font-weight: 500;
+			color: var(--background-color);
+			margin-left: 5px;
+			transition: color 0.3s ease;
+		}
+
+		input,
+		textarea {
+			border: none;
+			background: rgba(255, 255, 255, 0.8);
+			backdrop-filter: blur(10px);
+			height: 55px;
+			width: 100%;
+			padding: 0 20px;
+			color: var(--foreground-color);
+			font-family: inherit;
+			font-size: 1rem;
+			border: 1px solid rgba(0, 0, 0, 0.2);
+			border-radius: 12px;
+			transition: all 0.3s ease;
+			box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+
+			&::placeholder {
+				color: rgba(0, 0, 0, 0.5);
+				font-weight: 300;
+			}
+
+			&:focus {
+				outline: none;
+				border-color: var(--orange-color);
+				background: rgba(255, 255, 255, 0.95);
+				box-shadow: 0 0 0 3px rgba(255, 107, 0, 0.2);
+				transform: translateY(-1px);
+			}
+
+			&:hover {
+				border-color: rgba(0, 0, 0, 0.3);
+				background: rgba(255, 255, 255, 0.9);
+			}
+
+			&:disabled {
+				opacity: 0.6;
+				cursor: not-allowed;
+				background: rgba(0, 0, 0, 0.1);
+			}
+		}
+
+		// Стили для ошибок
+		&.error {
+			label {
+				color: #d32f2f;
+			}
+
+			input,
+			textarea {
+				border-color: #d32f2f;
+
+				&:focus {
+					border-color: #d32f2f;
+					box-shadow: var(--box-shine);
+				}
+			}
+		}
+	}
+
+	.additionalInput {
+		height: 120px !important;
+		padding: 15px 20px !important;
+		resize: vertical;
+		min-height: 120px;
+		max-height: 200px;
+
+		&::-webkit-resizer {
+			background: rgba(0, 0, 0, 0.3);
+			border-radius: 2px;
+		}
+	}
+
+	.errorMessage {
+		color: #d32f2f;
+		font-size: 0.8rem;
+		margin-top: 0.3rem;
+		margin-left: 5px;
+		animation: slideIn 0.3s ease-out;
+		font-weight: 500;
+	}
+
+	.submitSection {
+		@include flex-col(1.5rem, flex-start, flex-start);
+		margin-top: 1rem;
+		animation: slideIn 0.5s ease-out 0.4s both;
+	}
+
+	.submitButton {
+		position: relative;
+		width: 250px;
+		height: 55px;
+		border: none;
+		border-radius: 12px;
+		background: linear-gradient(135deg, var(--orange-color) 0%, #ff6b00 100%);
+		color: white;
+		font-family: inherit;
+		font-size: 1.1rem;
+		font-weight: 600;
+		text-transform: uppercase;
+		letter-spacing: 0.5px;
+		cursor: pointer;
+		transition: all 0.3s ease;
+		overflow: hidden;
+		box-shadow: 0 4px 15px rgba(255, 107, 0, 0.3);
+
+		&::before {
+			content: "";
+			position: absolute;
+			top: 0;
+			left: -100%;
+			width: 100%;
+			height: 100%;
+			background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+			transition: left 0.5s ease;
+		}
+
+		&:hover:not(:disabled) {
+			transform: translateY(-2px);
+			box-shadow: 0 8px 25px rgba(255, 107, 0, 0.4);
+
+			&::before {
+				left: 100%;
+			}
+		}
+
+		&:active:not(:disabled) {
+			transform: translateY(0);
+			box-shadow: 0 4px 15px rgba(255, 107, 0, 0.3);
+		}
+
+		&:disabled {
+			opacity: 0.6;
+			cursor: not-allowed;
+			transform: none;
+			background: linear-gradient(135deg, #cccccc 0%, #999999 100%);
+			box-shadow: none;
+		}
+
+		// Альтернативный вариант с анимацией beam
+		&.beamAnimation {
+			background: linear-gradient(
+				-45deg,
+				var(--orange-color),
+				#ef911f,
+				#ee9324,
+				var(--orange-color)
+			);
+			background-size: 400% 400%;
+			animation: movebeam 8s ease infinite;
+
+			&:hover:not(:disabled) {
+				animation-duration: 1.5s;
+			}
+		}
+	}
+
+	.policyWarn {
+		font-size: 0.8rem;
+		color: var(--background-color);
+		max-width: 400px;
+		line-height: 1.4;
+		animation: slideIn 0.5s ease-out 0.5s both;
+	}
+
+	// Адаптивность
+	@media (max-width: 900px) {
+		padding: 2rem 1.5rem;
+
+		.formFields {
+			max-width: 100%;
+		}
+
+		.submitButton {
+			width: 100%;
+			max-width: 300px;
+		}
+	}
+
+	@media (max-width: 600px) {
+		padding: 1.5rem 1rem;
+
+		h2 {
+			font-size: 1.8rem;
+		}
+
+		.inputGroup {
+			input,
+			textarea {
+				height: 50px;
+				font-size: 0.95rem;
+			}
+		}
+
+		.additionalInput {
+			height: 100px !important;
+			min-height: 100px;
+		}
+
+		.submitButton {
+			height: 50px;
+			font-size: 1rem;
+		}
+	}
+}

@@ -1,0 +1,41 @@
+.paginator {
+    justify-self: center;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1.4rem;
+
+    padding: 10px;
+    background: var(--foreground-color);
+    box-shadow: var(--box-shadow);
+
+    border-radius: 8px;
+
+    p {
+        background: transparent;
+        color: var(--background-color);
+    }
+    span {
+        background: transparent;
+        font-weight: 600;
+        font-size: 2rem;
+        color: var(--orange-color);
+    }
+
+    button {
+        border: none;
+        outline: none;
+
+        background: var(--transparent-light-color);
+        color: var(--background-color);
+
+        border-radius: 50%;
+        width: 30px;
+        height: 30px;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+}

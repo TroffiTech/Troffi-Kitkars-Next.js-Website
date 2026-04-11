@@ -1,0 +1,227 @@
+// staticDescription.module.scss
+@mixin flex-col($gap, $align, $justify) {
+	display: flex;
+	flex-direction: column;
+	align-items: $align;
+	justify-content: $justify;
+	gap: $gap;
+}
+
+@mixin flex-row($gap, $align, $justify) {
+	display: flex;
+	flex-direction: row;
+	align-items: $align;
+	justify-content: $justify;
+	gap: $gap;
+}
+
+@mixin center-all {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	text-align: center;
+}
+
+.modal {
+	@include flex-col(0, center, center);
+	width: 100vw;
+	background: var(--background-color);
+
+	.innerContent {
+		width: 100vw;
+		max-width: 1600px;
+		justify-self: center;
+		padding: 80px 15px;
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: 4rem;
+		align-items: start;
+
+		@media (max-width: 900px) {
+			grid-template-columns: 1fr;
+			grid-template-rows: auto auto;
+			padding: 40px 15px;
+			gap: 2rem;
+		}
+
+		.upperInner {
+			padding: 0;
+			@include flex-col(2rem, center, flex-start);
+			height: auto;
+
+			@media (max-width: 900px) {
+				gap: 1.5rem;
+			}
+		}
+
+		.lowerInner {
+			padding: 0;
+			height: auto;
+			@include flex-col(1.5rem, flex-start, flex-start);
+
+			.categoriesString {
+				@include flex-row(0.5rem, center, flex-start);
+				flex-wrap: wrap;
+
+				p {
+					font-weight: 400;
+					font-size: 0.9rem;
+					color: var(--foreground-color);
+					opacity: 0.7;
+					margin: 0;
+				}
+			}
+
+			h2 {
+				font-weight: 700;
+				font-size: 2.2rem;
+				line-height: 1.2;
+				color: var(--foreground-color);
+				margin: 0;
+
+				@media (max-width: 900px) {
+					font-size: 1.8rem;
+				}
+			}
+
+			.sku {
+				font-weight: 400;
+				font-size: 1rem;
+				color: var(--foreground-color);
+				opacity: 0.7;
+				margin: 0;
+				padding: 0.5rem 1rem;
+				background: rgba(255, 255, 255, 0.05);
+				border-radius: 6px;
+			}
+
+			.priceBlock {
+				@include flex-col(0.5rem, flex-start, flex-start);
+				margin: 1rem 0;
+
+				.sale {
+					font-size: 2.5rem;
+					font-weight: 700;
+					color: var(--orange-color);
+					margin: 0;
+
+					@media (max-width: 900px) {
+						font-size: 2rem;
+					}
+				}
+
+				.regular {
+					font-size: 1.4rem;
+					font-weight: 400;
+					color: var(--foreground-color);
+					opacity: 0.6;
+					margin: 0;
+
+					span {
+						text-decoration: line-through;
+						text-decoration-thickness: 2px;
+					}
+
+					@media (max-width: 900px) {
+						font-size: 1.2rem;
+					}
+				}
+
+				&:has(.sale) .regular {
+					font-size: 1.2rem;
+				}
+
+				&:not(:has(.sale)) p {
+					font-size: 2.5rem;
+					font-weight: 700;
+					color: var(--foreground-color);
+					margin: 0;
+
+					@media (max-width: 900px) {
+						font-size: 2rem;
+					}
+				}
+			}
+
+			.addToCartButton {
+				margin-top: 1rem;
+
+				button {
+					padding: 14px 15px;
+					border: none;
+					border-radius: 4px;
+					font-family: inherit;
+					font-size: 1rem;
+					box-shadow: var(--box-shadow);
+					transition: all 0.2s ease;
+					cursor: pointer;
+
+					background: var(--foreground-color);
+					color: var(--background-color);
+
+					&:hover {
+						box-shadow: var(--box-shadow-variant);
+					}
+				}
+			}
+
+			h3 {
+				font-weight: 600;
+				font-size: 1.5rem;
+				color: var(--foreground-color);
+				margin: 2rem 0 1rem 0;
+				padding-bottom: 0.5rem;
+				border-bottom: 2px solid rgba(255, 107, 0, 0.3);
+				width: 100%;
+
+				@media (max-width: 900px) {
+					font-size: 1.3rem;
+					margin: 1.5rem 0 1rem 0;
+				}
+			}
+
+			.generatedDescription {
+				font-size: 1rem;
+				font-weight: 400;
+				line-height: 1.7;
+				color: var(--foreground-color);
+				opacity: 0.9;
+
+				// Стили для HTML контента
+				h1,
+				h2,
+				h3,
+				h4,
+				h5,
+				h6 {
+					color: var(--foreground-color);
+					margin: 1.5rem 0 0.5rem 0;
+				}
+
+				p {
+					margin: 1rem 0;
+				}
+
+				ul,
+				ol {
+					margin: 1rem 0;
+					padding-left: 1.5rem;
+				}
+
+				li {
+					margin: 0.5rem 0;
+				}
+
+				strong {
+					color: var(--orange-color);
+					font-weight: 600;
+				}
+
+				@media (max-width: 900px) {
+					font-size: 0.95rem;
+					line-height: 1.6;
+				}
+			}
+		}
+	}
+}

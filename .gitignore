@@ -1,0 +1,15 @@
+# Результат работы скриптов-апдейтеров
+/content-data
+
+# Next.js App
+/next-app/node_modules
+/next-app/.next
+/next-app/package-lock.json
+
+# Updaters
+/updater-scripts/node_modules
+/updater-scripts/package-lock.json
+
+# .env`s
+.env*
+next-env.d.ts

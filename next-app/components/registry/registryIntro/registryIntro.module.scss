@@ -1,0 +1,52 @@
+@mixin flex-col($gap, $align, $justify){
+    display: flex;
+    flex-direction: column;
+    align-items: $align;
+    justify-content: $justify;
+    gap: $gap;
+}
+
+@mixin flex-row($gap, $align, $justify){
+    display: flex;
+    flex-direction: row;
+    align-items: $align;
+    justify-content: $justify;
+    gap: $gap;
+}
+
+@mixin default-cont(){
+    width: 100vw;
+    max-width: 1600px;
+    padding: 5px 15px;
+    justify-self: center;
+}
+
+@mixin center-all{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center
+}
+
+.registryIntro {
+    @include default-cont();
+    @include flex-row(5px,start ,start );
+    margin-top: 1rem;
+
+    h1{
+        font-size: 3.2rem;
+        font-weight: 900;
+        color: var(--foreground-color);
+        max-width: 1000px;
+
+        span{
+            color: var(--orange-color);
+        }
+
+        @media(max-width:900px){
+            font-size: 1.6rem;
+            font-weight: 900;
+            width: fit-content  ;
+        }
+    }
+}

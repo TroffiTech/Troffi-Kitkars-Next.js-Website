@@ -1,0 +1,253 @@
+// sortSelector.module.scss
+@mixin flex-col($gap, $align, $justify) {
+	display: flex;
+	flex-direction: column;
+	align-items: $align;
+	justify-content: $justify;
+	gap: $gap;
+}
+
+@mixin flex-row($gap, $align, $justify) {
+	display: flex;
+	flex-direction: row;
+	align-items: $align;
+	justify-content: $justify;
+	gap: $gap;
+}
+
+@mixin center-all {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	text-align: center;
+}
+
+@mixin glass-morphism {
+	background: var(--foreground-color);
+	backdrop-filter: blur(20px);
+	border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+@mixin hover-glow {
+	transition: all 0.3s ease;
+
+	&:hover {
+		background: var(--foreground-color);
+		filter: brightness(1.1);
+		border-color: rgba(255, 255, 255, 0.2);
+		box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+	}
+}
+
+.sortOrderSelector {
+	position: relative;
+	@include glass-morphism;
+	@include flex-row(0.5rem, center, space-between);
+
+	height: 3.5rem;
+	width: 260px;
+	padding: 0 1.2rem;
+	border-radius: 12px;
+	cursor: pointer;
+	transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+	overflow: visible;
+	z-index: 10;
+
+	&:hover {
+		@include hover-glow;
+
+		&::before {
+			opacity: 0.6;
+		}
+
+		.icon svg {
+			fill: var(--orange-color);
+		}
+	}
+
+	p {
+		color: var(--background-color);
+		font-size: 0.95rem;
+		font-weight: 500;
+		margin: 0;
+		flex: 1;
+		transition: color 0.3s ease;
+	}
+
+	.icon {
+		@include center-all;
+		width: 24px;
+		height: 24px;
+		transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+
+		svg {
+			width: 16px;
+			height: 16px;
+			fill: var(--background-color);
+			opacity: 0.8;
+			transition: all 0.3s ease;
+		}
+	}
+
+	// Стили для открытого состояния
+	&.expanded {
+		border-color: var(--orange-color);
+		box-shadow: 0 8px 25px rgba(255, 107, 0, 0.15);
+
+		&::before {
+			opacity: 1;
+		}
+
+		.icon {
+			transform: rotate(180deg);
+
+			svg {
+				fill: var(--orange-color);
+				opacity: 1;
+			}
+		}
+
+		p {
+			color: var(--orange-color);
+			font-weight: 600;
+		}
+	}
+}
+
+.expandedList {
+	position: absolute;
+	@include glass-morphism;
+	@include flex-col(0, stretch, flex-start);
+
+	width: 100%;
+	top: calc(100% + 8px);
+	left: 0;
+	padding: 0.8rem 0;
+	border-radius: 12px;
+	box-shadow: 0 12px 40px rgba(0, 0, 0, 0.25);
+	z-index: 1000;
+
+	opacity: 0;
+	visibility: hidden;
+	transform: translateY(-10px);
+	transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+
+	// Декоративная стрелка
+	&::before {
+		content: "";
+		position: absolute;
+		top: -6px;
+		left: 1.5rem;
+		width: 12px;
+		height: 12px;
+		background: var(--foreground-color);
+		transform: rotate(45deg);
+		border-top: 1px solid rgba(255, 255, 255, 0.1);
+		border-left: 1px solid rgba(255, 255, 255, 0.1);
+	}
+
+	&.visible {
+		opacity: 1;
+		visibility: visible;
+		transform: translateY(0);
+	}
+
+	li {
+		@include flex-row(0.8rem, center, flex-start);
+		padding: 0.9rem 1.2rem;
+		color: var(--background-color);
+		font-size: 0.9rem;
+		font-weight: 400;
+		cursor: pointer;
+		transition: all 0.3s ease;
+		position: relative;
+		background: transparent;
+		list-style: none;
+		margin: 0;
+
+		// Индикатор перед пунктом
+		&::before {
+			content: "";
+			width: 4px;
+			height: 4px;
+			background: var(--background-color);
+			border-radius: 50%;
+			opacity: 0.5;
+			transition: all 0.3s ease;
+		}
+
+		&:hover {
+			background: rgba(255, 255, 255, 0.1);
+			color: var(--orange-color);
+			padding-left: 1.5rem;
+
+			&::before {
+				background: var(--orange-color);
+				opacity: 1;
+				transform: scale(1.2);
+			}
+		}
+
+		// Активный пункт (противоположный текущему)
+		&:active {
+			background: rgba(255, 107, 0, 0.15);
+		}
+	}
+}
+
+// Анимации
+@keyframes slideInDown {
+	from {
+		opacity: 0;
+		transform: translateY(-15px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+.sortOrderSelector {
+	animation: slideInDown 0.4s ease-out;
+}
+
+// Адаптивность
+@media (max-width: 900px) {
+	.sortOrderSelector {
+		width: 240px;
+		height: 3.2rem;
+		padding: 0 1rem;
+
+		p {
+			font-size: 0.9rem;
+		}
+
+		.icon {
+			width: 22px;
+			height: 22px;
+
+			svg {
+				width: 14px;
+				height: 14px;
+			}
+		}
+	}
+
+	.expandedList {
+		li {
+			padding: 0.8rem 1rem;
+			font-size: 0.85rem;
+		}
+	}
+}
+
+@media (max-width: 600px) {
+	.sortOrderSelector {
+		width: 220px;
+		height: 3rem;
+
+		p {
+			font-size: 0.85rem;
+		}
+	}
+}

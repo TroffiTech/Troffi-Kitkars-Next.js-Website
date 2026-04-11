@@ -1,0 +1,144 @@
+.callBackButton_background {
+	position: relative;
+	width: 20rem;
+	height: 3.5rem;
+
+	background: var(--orange-color); // Изначальная заливка
+	border: 1px solid var(--orange-color);
+	border-radius: 8px;
+
+	transition: all 0.3s ease;
+
+	&:hover {
+		background: transparent; // Меняем на цвет фона
+		border-color: var(--orange-color);
+
+		.callBackButton p {
+			color: var(--orange-color) !important; // Текст становится оранжевым
+			transform: translateX(4px);
+		}
+	}
+
+	&:active {
+		transform: scale(0.98);
+	}
+}
+
+.callBackButton {
+	border: none;
+	font-family: inherit;
+	font-weight: 500;
+	font-size: 1rem;
+	background: transparent;
+
+	width: 100%;
+	height: 100%;
+
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 8px;
+
+	border-radius: 8px;
+
+	cursor: pointer;
+	transition: all 0.3s ease;
+}
+
+.callBackButton p {
+	background: transparent;
+	color: var(--background-color) !important;
+	font-weight: 500;
+	letter-spacing: 0.2px;
+	transition: all 0.3s ease;
+}
+
+// Стрелка
+.callBackButton::after {
+	content: "→";
+	color: var(--background-color); // Изначально белая стрелка
+	font-size: 1.1rem;
+	transition: all 0.3s ease;
+}
+
+.callBackButton_background:hover .callBackButton::after {
+	color: var(--orange-color); // Стрелка становится оранжевой
+	transform: translateX(4px);
+}
+
+/* Link Button - в том же стиле */
+
+.linkButton_container {
+	position: relative;
+	width: fit-content;
+	padding: 1rem 2rem;
+
+	background: var(--orange-color); // Изначальная заливка
+	border: 1px solid var(--orange-color);
+	border-radius: 8px;
+
+	font-size: 1rem;
+	font-weight: 500;
+
+	cursor: pointer;
+	transition: all 0.3s ease;
+
+	&:hover {
+		background: transparent; // Меняем на цвет фона
+		border-color: var(--background-color);
+
+		.linkButton {
+			color: var(--orange-color); // Текст становится оранжевым
+			transform: translateX(4px);
+		}
+	}
+
+	&:active {
+		transform: scale(0.98);
+	}
+}
+
+.linkButton {
+	width: 100%;
+	height: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 8px;
+
+	color: var(--background-color); // Изначально белый текст
+	background: transparent;
+
+	font-weight: 500;
+	transition: all 0.3s ease;
+}
+
+.linkButton::after {
+	content: "→";
+	color: var(--background-color); // Изначально белая стрелка
+	transition: all 0.3s ease;
+}
+
+.linkButton_container:hover .linkButton::after {
+	color: var(--orange-color); // Стрелка становится оранжевой
+	transform: translateX(4px);
+}
+
+/* Вариант для темного фона */
+.linkButton_dark {
+	background: var(--orange-color);
+	border-color: var(--orange-color);
+
+	.linkButton {
+		color: var(--background-color);
+	}
+
+	&:hover {
+		background: var(--foreground-color); // На темном фоне меняем на foreground
+		border-color: var(--orange-color);
+
+		.linkButton {
+			color: var(--orange-color);
+		}
+	}
+}

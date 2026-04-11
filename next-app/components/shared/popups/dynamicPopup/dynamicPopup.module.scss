@@ -1,0 +1,54 @@
+@keyframes flicker {
+    0% {
+        opacity: 0;
+    }
+
+    10% {
+        opacity: 1;
+    }
+
+    90% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0;
+    }
+}
+
+.dynamicPopup {
+    position: fixed;
+    bottom: 1rem;
+    right: 2rem;
+
+    width: 320px;
+    padding: 10px 20px;
+
+    background: var(--transparent-black-color);
+    backdrop-filter: blur(8px);
+
+    border-radius: 8px;
+    box-shadow: var(--box-shadow);
+
+    z-index: 999;
+
+    animation: flicker 5s;
+
+    @media (max-width: 700px){
+        left: 50vw;
+        transform: translateX(-50%);
+    }
+
+    p{
+        background-color: transparent;
+        color: var(--background-color);
+
+        text-align: start;
+        font-weight: 600;
+
+        display: -webkit-box;
+        -webkit-line-clamp: 4;
+        -webkit-box-orient: vertical;  
+        overflow: hidden;
+    }
+}

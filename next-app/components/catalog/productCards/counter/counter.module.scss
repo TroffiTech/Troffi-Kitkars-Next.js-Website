@@ -1,0 +1,30 @@
+.counter {
+    display: flex;
+    width: 110px;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 1rem;
+
+    button {
+        width: 25px;
+        height: 25px;
+        border: 1px solid var(--transparent-dark-color);
+        border-radius: 50%;
+
+        box-shadow: var(--box-shadow);
+
+        transition: all 0.1s linear;
+        cursor: pointer;
+
+        &:active {
+            box-shadow: var(--box-shadow-variant);
+        }
+    }
+
+    p{
+        width: 20px;
+        text-align: center;
+        overflow-x: visible;
+    }
+}

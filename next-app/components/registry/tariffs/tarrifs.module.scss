@@ -1,0 +1,336 @@
+// tarrifs.module.scss
+@mixin flex-col($gap, $align, $justify) {
+	display: flex;
+	flex-direction: column;
+	align-items: $align;
+	justify-content: $justify;
+	gap: $gap;
+}
+
+@mixin flex-row($gap, $align, $justify) {
+	display: flex;
+	flex-direction: row;
+	align-items: $align;
+	justify-content: $justify;
+	gap: $gap;
+}
+
+@mixin default-cont() {
+	width: 100vw;
+	max-width: 1600px;
+	padding: 5px 15px;
+	justify-self: center;
+}
+
+@mixin center-all {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	text-align: center;
+}
+
+@mixin glass-morphism {
+	background: var(--foreground-color);
+	backdrop-filter: blur(20px);
+	border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+@mixin hover-glow {
+	transition: all 0.3s ease;
+
+	&:hover {
+		background: var(--foreground-color);
+		filter: brightness(1.1);
+		border-color: rgba(255, 255, 255, 0.2);
+		box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+	}
+}
+
+@keyframes fadeInUp {
+	from {
+		opacity: 0;
+		transform: translateY(30px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+@keyframes pulse-glow {
+	0%,
+	100% {
+		box-shadow: 0 4px 15px rgba(255, 107, 0, 0.2);
+	}
+	50% {
+		box-shadow: 0 6px 25px rgba(255, 107, 0, 0.4);
+	}
+}
+
+.tarrifsCards {
+	@include default-cont();
+	@include flex-col(4rem, center, center);
+	margin-top: 2rem;
+	margin-bottom: 2rem;
+	padding: 80px 15px;
+
+	@media (max-width: 900px) {
+		padding: 40px 15px;
+		gap: 2rem;
+	}
+
+	h2 {
+		font-size: 3.2rem;
+		font-weight: 800;
+		text-align: center;
+		color: var(--foreground-color);
+		line-height: 1.2;
+		animation: fadeInUp 0.6s ease-out;
+
+		@media (max-width: 1200px) {
+			font-size: 2.8rem;
+		}
+
+		@media (max-width: 900px) {
+			font-size: 2.2rem;
+		}
+
+		@media (max-width: 600px) {
+			font-size: 1.8rem;
+		}
+
+		span {
+			color: var(--blue-color);
+			background: transparent;
+			position: relative;
+
+			&::after {
+				content: "";
+				position: absolute;
+				bottom: -5px;
+				left: 0;
+				width: 100%;
+				height: 3px;
+				background: var(--orange-color);
+				border-radius: 2px;
+			}
+		}
+	}
+
+	.cards {
+		@include flex-row(2rem, stretch, space-around);
+		width: 100%;
+		max-width: 1200px;
+		cursor: default;
+
+		@media (max-width: 1150px) {
+			@include flex-col(2rem, center, center);
+		}
+
+		.card {
+			@include flex-col(2rem, stretch, space-between);
+			@include glass-morphism;
+			width: 100%;
+			max-width: 360px;
+			padding: 2.5rem 2rem;
+			border-radius: 20px;
+			transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+			position: relative;
+			overflow: hidden;
+			animation: fadeInUp 0.6s ease-out;
+
+			// Декоративный акцент
+			&::before {
+				content: "";
+				position: absolute;
+				left: 0;
+				top: 0;
+				height: 100%;
+				width: 4px;
+				background: var(--orange-color);
+				opacity: 0;
+				transition: opacity 0.3s ease;
+			}
+
+			&:hover {
+				@include hover-glow;
+				transform: translateY(-8px);
+
+				&::before {
+					opacity: 1;
+				}
+
+				.price {
+					animation: pulse-glow 2s ease-in-out infinite;
+				}
+			}
+
+			// Анимации для каждой карточки с задержкой
+			&:nth-child(1) {
+				animation-delay: 0.1s;
+			}
+			&:nth-child(2) {
+				animation-delay: 0.2s;
+				border: 2px solid var(--orange-color);
+
+				&::before {
+					opacity: 1;
+					background: var(--blue-color);
+				}
+			}
+			&:nth-child(3) {
+				animation-delay: 0.3s;
+			}
+
+			h3 {
+				font-size: 1.8rem;
+				font-weight: 700;
+				color: var(--blue-color);
+				text-align: center;
+				line-height: 1.3;
+				background: transparent;
+				margin: 0;
+				min-height: auto;
+
+				@media (max-width: 900px) {
+					font-size: 1.6rem;
+				}
+
+				br {
+					background: transparent;
+				}
+			}
+
+			.price {
+				background: linear-gradient(135deg, var(--orange-color) 0%, #ff6b00 100%);
+				color: var(--background-color);
+				font-size: 1.5rem;
+				font-weight: 700;
+				padding: 1rem 2rem;
+				border-radius: 12px;
+				text-align: center;
+				transition: all 0.3s ease;
+				box-shadow: 0 4px 15px rgba(255, 107, 0, 0.3);
+				cursor: default;
+
+				@media (max-width: 900px) {
+					font-size: 1.3rem;
+					padding: 0.8rem 1.5rem;
+				}
+			}
+
+			.description {
+				font-size: 1.1rem;
+				line-height: 1.5;
+				color: var(--background-color);
+				background: transparent;
+				padding-bottom: 1.5rem;
+				border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+				margin: 0;
+
+				@media (max-width: 900px) {
+					font-size: 1rem;
+				}
+			}
+
+			.tarrifInfo {
+				@include flex-col(1rem, stretch, flex-start);
+				background: transparent;
+				color: var(--background-color);
+				flex: 1;
+
+				p {
+					font-size: 1rem;
+					line-height: 1.4;
+					background: transparent;
+					color: var(--background-color);
+					margin: 0;
+					font-weight: 500;
+
+					@media (max-width: 900px) {
+						font-size: 0.95rem;
+					}
+				}
+
+				ul {
+					@include flex-col(0.5rem, stretch, flex-start);
+					padding: 0;
+					margin: 0;
+					background: transparent;
+					list-style: none;
+
+					li {
+						background: transparent;
+						color: var(--orange-color);
+						font-size: 1rem;
+						font-weight: 500;
+						padding: 0.3rem 0;
+						position: relative;
+						padding-left: 1.5rem;
+
+						@media (max-width: 900px) {
+							font-size: 0.95rem;
+						}
+
+						&::before {
+							content: "•";
+							position: absolute;
+							left: 0;
+							color: var(--blue-color);
+							font-size: 1.2rem;
+							background: transparent;
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+// Стили для выделения популярного тарифа
+.cards .card:nth-child(2) {
+	transform: scale(1.05);
+
+	@media (max-width: 1150px) {
+		transform: scale(1);
+		order: -1; // Помещаем популярный тариф первым на мобильных
+	}
+
+	.price {
+		background: linear-gradient(135deg, var(--blue-color) 0%, #2980b9 100%);
+		box-shadow: 0 4px 15px rgba(41, 128, 185, 0.3);
+	}
+
+	&:hover {
+		transform: translateY(-8px) scale(1.05);
+
+		@media (max-width: 1150px) {
+			transform: translateY(-8px);
+		}
+	}
+}
+
+// Адаптивность для очень маленьких экранов
+@media (max-width: 480px) {
+	.tarrifsCards {
+		padding: 30px 10px;
+
+		.cards .card {
+			padding: 2rem 1.5rem;
+			max-width: 100%;
+
+			h3 {
+				font-size: 1.4rem;
+			}
+
+			.price {
+				font-size: 1.2rem;
+				padding: 0.8rem 1.2rem;
+			}
+
+			.description {
+				font-size: 0.95rem;
+			}
+		}
+	}
+}

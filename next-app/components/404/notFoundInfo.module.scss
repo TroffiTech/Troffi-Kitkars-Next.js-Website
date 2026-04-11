@@ -1,0 +1,62 @@
+@mixin flex-col($gap, $align, $justify){
+    display: flex;
+    flex-direction: column;
+    align-items: $align;
+    justify-content: $justify;
+    gap: $gap;
+}
+
+@mixin flex-row($gap, $align, $justify){
+    display: flex;
+    flex-direction: row;
+    align-items: $align;
+    justify-content: $justify;
+    gap: $gap;
+}
+
+@mixin default-cont(){
+    width: 100vw;
+    max-width: 1600px;
+    padding: 5px 15px;
+    justify-self: center;
+}
+
+@mixin center-all{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    justify-content: center;
+    text-align: center
+}
+
+
+.notFound{
+    @include default-cont();
+    @include center-all();
+    @include flex-col(1rem, center, start);
+
+    height: calc(100vh - 80px);
+
+    @media (max-width:900px){
+        height: calc(100vh - 62px);
+    }
+    
+    h1 {
+        font-size: 20rem;
+        font-weight: 900;
+        color: var(--orange-color);
+
+        @media (max-width:900px){
+            font-size: 10rem;
+        }
+    }
+
+    p {
+        font-size: 3.2rem;
+        font-weight: 100;
+
+        @media (max-width:900px){
+            font-size: 2rem;
+        }
+    }
+}

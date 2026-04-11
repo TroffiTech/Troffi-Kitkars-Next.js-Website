@@ -1,0 +1,15 @@
+{
+	"name": "updater-scripts",
+	"version": "1.0.0",
+	"description": "content updating system fot troffi next.js web sites",
+	"main": "updateContent.js",
+	"scripts": {
+		"update": "node updateContent.js"
+	},
+	"author": "",
+	"license": "ISC",
+	"dependencies": {
+		"dotenv": "^17.3.1",
+		"fast-xml-parser": "^5.4.1"
+	}
+}

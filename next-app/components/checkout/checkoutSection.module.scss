@@ -1,0 +1,144 @@
+@mixin flex-col($gap, $align, $justify) {
+	display: flex;
+	flex-direction: column;
+	align-items: $align;
+	justify-content: $justify;
+	gap: $gap;
+}
+
+@mixin flex-row($gap, $align, $justify) {
+	display: flex;
+	flex-direction: row;
+	align-items: $align;
+	justify-content: $justify;
+	gap: $gap;
+}
+
+@mixin default-cont() {
+	width: 100vw;
+	max-width: 1600px;
+	padding: 5px 15px;
+	justify-self: center;
+}
+
+@mixin center-all {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	text-align: center;
+}
+
+.checkoutSection {
+	@include default-cont();
+	min-height: calc(100vh - 150px);
+	padding: 50px;
+	display: grid;
+	grid-template-columns: repeat(5, 1fr);
+	gap: 2rem;
+
+	@media (max-width: 1400px) {
+		@include flex-col(4rem, start, start);
+		padding-left: 100px;
+	}
+
+	@media (max-width: 900px) {
+		@include flex-col(4rem, center, center);
+		padding: 50px 15px;
+	}
+
+	.orderList {
+		@include flex-col(1rem, center, center);
+
+		padding: 20px 15px;
+		border-radius: 16px;
+		background: var(--background-gradient);
+
+		box-shadow: var(--box-shadow);
+
+		@media (max-width: 1400px) {
+			width: fit-content;
+		}
+
+		@media (max-width: 900px) {
+			padding: 20px 5px;
+			width: 94vw;
+		}
+
+		h3 {
+			background: transparent;
+			color: var(--background-color);
+			font-size: 2.4rem;
+			margin-bottom: 1rem;
+
+			@media (max-width: 900px) {
+				font-size: 1.4rem;
+			}
+		}
+
+		li {
+			@include flex-row(0, center, space-between);
+			width: 100%;
+			background: transparent;
+			color: var(--background-color);
+
+			@media (max-width: 1400px) {
+				gap: 2rem;
+			}
+
+			.nameBlock {
+				@include flex-row(1rem, center, center);
+				background: transparent;
+
+				p {
+					background: transparent;
+					color: var(--background-color);
+					font-size: 1.2rem;
+
+					@media (max-width: 900px) {
+						font-size: 0.9rem;
+					}
+
+					&:nth-child(2) {
+						width: 300px;
+
+						@media (max-width: 900px) {
+							width: 160px;
+						}
+					}
+				}
+			}
+
+			p {
+				background: transparent;
+				color: var(--background-color);
+				font-size: 1.2rem;
+
+				@media (max-width: 900px) {
+					font-size: 0.9rem;
+				}
+			}
+
+			span {
+				background: transparent;
+				color: var(--background-color);
+			}
+		}
+
+		.total {
+			justify-content: flex-start;
+			align-items: start;
+			gap: 1rem;
+			padding: 10px 30px;
+			margin-top: 1rem;
+
+			font-size: 2rem;
+			font-weight: 600;
+
+			border-top: 1px solid var(--transparent-light-color);
+
+			@media (max-width: 900px) {
+				font-size: 1.4rem;
+			}
+		}
+	}
+}

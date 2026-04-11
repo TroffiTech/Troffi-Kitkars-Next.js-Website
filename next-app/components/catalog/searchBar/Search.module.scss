@@ -1,0 +1,238 @@
+// Search.module.scss
+@mixin flex-col($gap, $align, $justify) {
+	display: flex;
+	flex-direction: column;
+	align-items: $align;
+	justify-content: $justify;
+	gap: $gap;
+}
+
+@mixin flex-row($gap, $align, $justify) {
+	display: flex;
+	flex-direction: row;
+	align-items: $align;
+	justify-content: $justify;
+	gap: $gap;
+}
+
+@mixin center-all {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	text-align: center;
+}
+
+@mixin glass-morphism {
+	background: var(--foreground-color);
+	backdrop-filter: blur(20px);
+	border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+@mixin hover-glow {
+	transition: all 0.3s ease;
+
+	&:hover {
+		background: var(--foreground-color);
+		filter: brightness(1.1);
+		border-color: rgba(255, 255, 255, 0.2);
+		box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+	}
+}
+
+.searchContainer {
+	position: relative;
+	width: fit-content;
+	height: fit-content;
+}
+
+.searchInputWrapper {
+	@include glass-morphism;
+	@include flex-row(0, center, space-between);
+
+	position: relative;
+	height: 3.5rem;
+	width: 450px;
+	border-radius: 12px;
+	padding: 0 1rem;
+	transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+	overflow: hidden;
+
+	// Декоративный акцент
+	&::before {
+		content: "";
+		position: absolute;
+		left: 0;
+		top: 0;
+		height: 100%;
+		width: 3px;
+		background: var(--orange-color);
+		opacity: 0;
+		transition: opacity 0.3s ease;
+	}
+
+	&:focus-within {
+		border-color: var(--orange-color);
+		box-shadow: 0 8px 25px rgba(255, 107, 0, 0.15);
+
+		&::before {
+			opacity: 1;
+		}
+	}
+
+	@include hover-glow;
+}
+
+.searchInput {
+	border: none;
+	background: transparent;
+	height: 100%;
+	width: 100%;
+	padding: 0 1rem 0 0.5rem;
+	color: var(--background-color);
+	font-family: inherit;
+	font-size: 1rem;
+	font-weight: 400;
+	transition: all 0.3s ease;
+
+	&::placeholder {
+		color: var(--background-color);
+		font-weight: 300;
+		font-size: 1rem;
+		opacity: 0.8;
+		transition: opacity 0.3s ease;
+	}
+
+	&:focus {
+		outline: none;
+
+		&::placeholder {
+			opacity: 0.5;
+		}
+	}
+}
+
+.searchButton {
+	@include center-all;
+	background: transparent;
+	border: none;
+	cursor: pointer;
+	padding: 0.5rem;
+	border-radius: 8px;
+	transition: all 0.3s ease;
+	position: relative;
+	overflow: hidden;
+
+	&::before {
+		content: "";
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		width: 0;
+		height: 0;
+		background: var(--orange-color);
+		border-radius: 50%;
+		transition: all 0.3s ease;
+		transform: translate(-50%, -50%);
+	}
+
+	&:hover {
+		background: rgba(255, 255, 255, 0.1);
+
+		&::before {
+			width: 40px;
+			height: 40px;
+			opacity: 0.1;
+		}
+
+		svg {
+			fill: var(--orange-color);
+			transform: scale(1.1);
+		}
+	}
+
+	&:active {
+		transform: scale(0.95);
+	}
+
+	svg {
+		width: 30px;
+		height: 30px;
+		fill: var(--foreground-color);
+		transition: all 0.3s ease;
+		opacity: 0.8;
+	}
+}
+
+// Анимации
+@keyframes slideInRight {
+	from {
+		opacity: 0;
+		transform: translateX(-20px);
+	}
+	to {
+		opacity: 1;
+		transform: translateX(0);
+	}
+}
+
+@keyframes pulseGlow {
+	0%,
+	100% {
+		box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+	}
+	50% {
+		box-shadow: 0 6px 20px rgba(255, 107, 0, 0.3);
+	}
+}
+
+.searchContainer {
+	animation: slideInRight 0.5s ease-out;
+}
+
+// Состояние загрузки/поиска
+.searching {
+	.searchInputWrapper {
+		animation: pulseGlow 2s ease-in-out infinite;
+	}
+}
+
+// Адаптивность
+@media (max-width: 900px) {
+	.searchInputWrapper {
+		width: 350px;
+		height: 3rem;
+	}
+
+	.searchInput {
+		font-size: 0.95rem;
+
+		&::placeholder {
+			font-size: 0.95rem;
+		}
+	}
+
+	.searchButton {
+		padding: 0.4rem;
+
+		svg {
+			width: 18px;
+			height: 18px;
+		}
+	}
+}
+
+@media (max-width: 600px) {
+	.searchInputWrapper {
+		width: 300px;
+		height: 2.8rem;
+	}
+
+	.searchInput {
+		font-size: 0.9rem;
+		padding: 0 0.5rem 0 0.25rem;
+
+		&::placeholder {
+			font-size: 0.9rem;
+		}
+	}
+}

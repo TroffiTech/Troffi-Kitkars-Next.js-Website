@@ -1,0 +1,57 @@
+@mixin default-cont(){
+    width: 100vw;
+    max-width: 1600px;
+    padding: 0 15px;
+    justify-self: center;
+}
+
+@mixin flex-col($gap, $align, $justify){
+    display: flex;
+    flex-direction: column;
+    align-items: $align;
+    justify-content: $justify;
+    gap: $gap;
+}
+
+.offerInfo{
+    @include default-cont();
+    padding: 40px 10px;
+
+    ol{
+        @include flex-col(2rem, start, start);
+
+        h2 {
+            font-size: 2rem;
+            font-weight: 500;
+            letter-spacing: -2px;
+
+            @media(max-width:900px){
+                font-size: 1.4rem;
+            }
+        }
+
+        li{
+            @include flex-col(1rem, start, start);
+            font-size: 1.2rem;
+            font-weight: 300;
+            padding-left: 15px;
+
+            @media(max-width:900px){
+                font-size: 1rem;
+            }
+
+            ul {
+                @include flex-col(1rem, start, start);
+            }
+
+            p{
+                font-size: 1.2rem;
+                font-weight: 300;
+
+                @media(max-width:900px){
+                    font-size: 1rem;
+                }
+            }
+        }
+    }
+}

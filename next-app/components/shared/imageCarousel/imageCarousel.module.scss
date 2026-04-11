@@ -1,0 +1,268 @@
+.carouselContainer {
+	width: 100%;
+	max-width: 600px;
+	align-self: center;
+
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	gap: 1.5rem;
+
+	@media (max-width: 900px) {
+		width: 100%;
+		max-width: none;
+	}
+
+	.carousel {
+		position: relative;
+		width: 100%;
+		overflow: hidden;
+		border-radius: 20px;
+
+		// Glassmorphism эффект
+		background: rgba(255, 255, 255, 0.05);
+		backdrop-filter: blur(20px);
+		border: 1px solid rgba(255, 255, 255, 0.1);
+		box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+
+		.carouselInner {
+			height: 100%;
+			display: flex;
+			align-items: center;
+			justify-content: flex-start;
+			transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+
+			.img {
+				min-width: 100%;
+				height: 500px;
+				border-radius: 20px;
+				background-size: contain !important;
+				background-repeat: no-repeat !important;
+				background-position: center !important;
+
+				// Затемнение для лучшего контраста с кнопками
+				position: relative;
+
+				&::after {
+					content: "";
+					position: absolute;
+					bottom: 0;
+					left: 0;
+					right: 0;
+					height: 60px;
+					background: linear-gradient(transparent, rgba(0, 0, 0, 0.3));
+					border-radius: 0 0 20px 20px;
+				}
+
+				@media (max-width: 1200px) {
+					height: 400px;
+				}
+
+				@media (max-width: 900px) {
+					height: 300px;
+				}
+
+				@media (max-width: 480px) {
+					height: 250px;
+				}
+			}
+		}
+
+		.buttonController_left,
+		.buttonController_right {
+			position: absolute;
+			top: 50%;
+			transform: translateY(-50%);
+			width: 50px;
+			height: 50px;
+			background: var(--orange-color);
+			border: none;
+			border-radius: 50%;
+			cursor: pointer;
+
+			display: flex;
+			align-items: center;
+			justify-content: center;
+
+			transition: all 0.3s ease;
+			z-index: 10;
+			box-shadow: 0 4px 15px rgba(255, 107, 0, 0.3);
+
+			&:hover {
+				background: var(--background-color);
+				transform: translateY(-50%) scale(1.1);
+				box-shadow: 0 6px 20px rgba(255, 107, 0, 0.4);
+
+				svg {
+					fill: var(--orange-color);
+				}
+			}
+
+			&:active {
+				transform: translateY(-50%) scale(0.95);
+			}
+
+			svg {
+				width: 20px;
+				height: 20px;
+				fill: var(--background-color);
+				transition: fill 0.3s ease;
+			}
+
+			@media (max-width: 900px) {
+				width: 45px;
+				height: 45px;
+
+				svg {
+					width: 18px;
+					height: 18px;
+				}
+			}
+
+			@media (max-width: 480px) {
+				width: 40px;
+				height: 40px;
+
+				svg {
+					width: 16px;
+					height: 16px;
+				}
+			}
+		}
+
+		.buttonController_left {
+			left: 20px;
+
+			@media (max-width: 900px) {
+				left: 15px;
+			}
+
+			@media (max-width: 480px) {
+				left: 10px;
+			}
+		}
+
+		.buttonController_right {
+			right: 20px;
+
+			@media (max-width: 900px) {
+				right: 15px;
+			}
+
+			@media (max-width: 480px) {
+				right: 10px;
+			}
+		}
+	}
+
+	.indicatorsContainer {
+		width: 100%;
+		max-width: 100%;
+		padding: 1rem;
+
+		display: grid;
+		gap: 0.8rem;
+		grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+		justify-content: center;
+
+		// Glassmorphism для контейнера индикаторов
+		background: rgba(255, 255, 255, 0.03);
+		backdrop-filter: blur(10px);
+		border: 1px solid rgba(255, 255, 255, 0.05);
+		border-radius: 16px;
+
+		@media (max-width: 900px) {
+			gap: 0.6rem;
+			grid-template-columns: repeat(auto-fit, minmax(70px, 1fr));
+			padding: 0.8rem;
+		}
+
+		@media (max-width: 480px) {
+			grid-template-columns: repeat(auto-fit, minmax(60px, 1fr));
+			gap: 0.5rem;
+			padding: 0.6rem;
+		}
+
+		.img {
+			width: 100%;
+			aspect-ratio: 1;
+			border-radius: 12px;
+			background-size: cover !important;
+			background-repeat: no-repeat !important;
+			background-position: center !important;
+			border: 2px solid transparent;
+			cursor: pointer;
+			transition: all 0.3s ease;
+
+			// Glassmorphism для миниатюр
+			background: rgba(255, 255, 255, 0.05);
+			backdrop-filter: blur(10px);
+			position: relative;
+			overflow: hidden;
+
+			&::before {
+				content: "";
+				position: absolute;
+				top: 0;
+				left: 0;
+				right: 0;
+				bottom: 0;
+				background: rgba(255, 255, 255, 0.1);
+				opacity: 0;
+				transition: opacity 0.3s ease;
+			}
+
+			&:hover {
+				transform: translateY(-2px);
+				border-color: rgba(255, 255, 255, 0.2);
+				box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+
+				&::before {
+					opacity: 1;
+				}
+			}
+
+			// Активный индикатор
+			&[style*="var(--transparent-dark-color)"] {
+				border-color: var(--orange-color) !important;
+				box-shadow: 0 0 0 2px rgba(255, 107, 0, 0.3);
+
+				&::after {
+					content: "";
+					position: absolute;
+					bottom: 0;
+					left: 0;
+					right: 0;
+					height: 3px;
+					background: var(--orange-color);
+					border-radius: 0 0 10px 10px;
+				}
+			}
+
+			@media (max-width: 900px) {
+				border-radius: 10px;
+			}
+
+			@media (max-width: 480px) {
+				border-radius: 8px;
+			}
+		}
+	}
+}
+
+// Анимации
+@keyframes fadeIn {
+	from {
+		opacity: 0;
+		transform: scale(0.9);
+	}
+	to {
+		opacity: 1;
+		transform: scale(1);
+	}
+}
+
+.carouselContainer {
+	animation: fadeIn 0.5s ease-out;
+}

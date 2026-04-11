@@ -1,0 +1,435 @@
+// deliveryInfo.module.scss
+@mixin flex-col($gap, $align, $justify) {
+	display: flex;
+	flex-direction: column;
+	align-items: $align;
+	justify-content: $justify;
+	gap: $gap;
+}
+
+@mixin flex-row($gap, $align, $justify) {
+	display: flex;
+	flex-direction: row;
+	align-items: $align;
+	justify-content: $justify;
+	gap: $gap;
+}
+
+@mixin default-cont() {
+	width: 100vw;
+	max-width: 1600px;
+	padding: 5px 15px;
+	justify-self: center;
+}
+
+@mixin center-all {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	text-align: center;
+}
+
+@mixin glass-card {
+	background: var(--background-gradient);
+	backdrop-filter: blur(20px);
+	border: 1px solid rgba(255, 255, 255, 0.1);
+	box-shadow: var(--box-shadow);
+	border-radius: 16px;
+}
+
+@keyframes fadeInUp {
+	from {
+		opacity: 0;
+		transform: translateY(30px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+@keyframes float {
+	0%,
+	100% {
+		transform: translateY(0);
+	}
+	50% {
+		transform: translateY(-5px);
+	}
+}
+
+@keyframes slideInFromLeft {
+	from {
+		opacity: 0;
+		transform: translateX(-30px);
+	}
+	to {
+		opacity: 1;
+		transform: translateX(0);
+	}
+}
+
+@keyframes pulse {
+	0%,
+	100% {
+		transform: scale(1);
+	}
+	50% {
+		transform: scale(1.02);
+	}
+}
+
+.deliveryInfo {
+	@include default-cont();
+	@include flex-col(4rem, start, start);
+	padding: 2rem 10px;
+
+	.deliveryCard {
+		width: 100%;
+		border-radius: 20px;
+		padding: 50px;
+		@include glass-card;
+		display: grid;
+		grid-template-columns: repeat(2, 1fr);
+		gap: 3rem;
+		animation: fadeInUp 0.6s ease-out;
+		transition: all 0.3s ease;
+
+		&:hover {
+			box-shadow: var(--box-shadow-variant);
+			transform: translateY(-3px);
+		}
+
+		@media (max-width: 1500px) {
+			grid-template-columns: 1fr;
+			align-items: center;
+			padding: 40px 20px;
+			gap: 2rem;
+		}
+
+		@media (max-width: 900px) {
+			padding: 30px 15px;
+		}
+
+		.title {
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+			animation: slideInFromLeft 0.6s ease-out 0.2s both;
+
+			h2 {
+				font-size: 2.8rem;
+				font-weight: 800;
+				color: var(--orange-color);
+				background: transparent;
+				margin-bottom: 1rem;
+				position: relative;
+
+				&::before {
+					content: "";
+					position: absolute;
+					left: 0;
+					bottom: -8px;
+					width: 80px;
+					height: 4px;
+					background: var(--blue-color);
+					border-radius: 2px;
+				}
+
+				@media (max-width: 900px) {
+					font-size: 2rem;
+				}
+			}
+
+			p {
+				font-size: 1.5rem;
+				font-weight: 300;
+				color: var(--background-color);
+				background: transparent;
+				line-height: 1.5;
+
+				@media (max-width: 900px) {
+					font-size: 1.2rem;
+				}
+			}
+		}
+
+		ul {
+			display: grid;
+			grid-template-columns: repeat(3, 1fr);
+			gap: 1.5rem;
+			animation: fadeInUp 0.6s ease-out 0.4s both;
+
+			@media (max-width: 900px) {
+				gap: 1rem;
+				grid-template-columns: repeat(2, 1fr);
+			}
+
+			@media (max-width: 480px) {
+				grid-template-columns: 1fr;
+			}
+
+			li {
+				height: 120px;
+				background-size: contain;
+				background-position: center;
+				background-repeat: no-repeat;
+				background-color: var(--background-color);
+				border-radius: 12px;
+				padding: 20px;
+				transition: all 0.3s ease;
+				border: 2px solid transparent;
+
+				&:hover {
+					transform: scale(1.05);
+					border-color: var(--orange-color);
+					box-shadow: 0 8px 20px rgba(255, 107, 0, 0.2);
+					animation: float 2s ease-in-out infinite;
+				}
+
+				@media (max-width: 1500px) {
+					height: 100px;
+				}
+
+				@media (max-width: 900px) {
+					height: 80px;
+					padding: 15px;
+				}
+
+				// Логотипы компаний
+				&:nth-child(1) {
+					background-image: url("/logisticCompanyLogos/ПЭК.webp");
+				}
+				&:nth-child(2) {
+					background-image: url("/logisticCompanyLogos/Анкор.jpeg");
+				}
+				&:nth-child(3) {
+					background-image: url("/logisticCompanyLogos/Байкал_Сервис.png");
+				}
+				&:nth-child(4) {
+					background-image: url("/logisticCompanyLogos/вл_лоджистик.jpeg");
+				}
+				&:nth-child(5) {
+					background-image: url("/logisticCompanyLogos/РАТЭК.png");
+				}
+				&:nth-child(6) {
+					background-image: url("/logisticCompanyLogos/ЖелДорЭкспедиция.png");
+				}
+				&:nth-child(7) {
+					background-image: url("/logisticCompanyLogos/КИТ.png");
+				}
+				&:nth-child(8) {
+					background-image: url("/logisticCompanyLogos/Деловые_Линии.jpg");
+				}
+				&:nth-child(9) {
+					background-image: url("/logisticCompanyLogos/Энергия.png");
+				}
+			}
+		}
+	}
+
+	.cardsContainer {
+		width: 100%;
+		padding-bottom: 4rem;
+		display: flex;
+		align-items: stretch;
+		justify-content: space-between;
+		gap: 3rem;
+		border-bottom: 1px solid var(--transparent-dark-color);
+
+		@media (max-width: 1400px) {
+			display: grid;
+			grid-template-columns: repeat(2, 1fr);
+			gap: 2rem;
+		}
+
+		@media (max-width: 900px) {
+			display: flex;
+			flex-direction: column;
+			gap: 2rem;
+		}
+
+		.deliveryCard {
+			@include flex-col(1.5rem, start, space-between);
+			height: auto;
+			min-height: 280px;
+			text-align: start;
+			padding: 2.5rem;
+			animation: fadeInUp 0.6s ease-out;
+			transition: all 0.3s ease;
+			position: relative;
+
+			// Нумерация карточек
+			&::before {
+				content: attr(data-number);
+				position: absolute;
+				top: -15px;
+				left: 25px;
+				background: var(--orange-color);
+				color: white;
+				width: 40px;
+				height: 40px;
+				border-radius: 50%;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				font-weight: 700;
+				font-size: 1.2rem;
+				box-shadow: 0 4px 15px rgba(255, 107, 0, 0.3);
+			}
+
+			&:hover {
+				transform: translateY(-5px);
+				box-shadow: var(--box-shadow-variant);
+
+				&::before {
+					animation: pulse 1s ease-in-out;
+				}
+			}
+
+			// Анимации для каждой карточки с задержкой
+			&:nth-child(1) {
+				animation-delay: 0.1s;
+			}
+			&:nth-child(2) {
+				animation-delay: 0.2s;
+			}
+			&:nth-child(3) {
+				animation-delay: 0.3s;
+			}
+			&:nth-child(4) {
+				animation-delay: 0.4s;
+			}
+
+			h2 {
+				background: transparent;
+				font-size: 1.6rem;
+				font-weight: 700;
+				color: var(--orange-color);
+				margin: 0;
+				padding-top: 1rem;
+			}
+
+			p {
+				background: transparent;
+				font-size: 1.1rem;
+				font-weight: 300;
+				line-height: 1.5;
+				color: var(--background-color);
+				margin: 0;
+			}
+		}
+	}
+
+	.payInfoContainer {
+		width: 100%;
+		padding: 50px;
+		border-radius: 24px;
+		@include glass-card;
+		animation: fadeInUp 0.6s ease-out 0.5s both;
+
+		@media (max-width: 900px) {
+			padding: 30px 20px;
+		}
+
+		h2 {
+			background: transparent;
+			color: var(--orange-color);
+			font-size: 2rem;
+			font-weight: 700;
+			margin-bottom: 2rem;
+			position: relative;
+
+			&::after {
+				content: "";
+				position: absolute;
+				bottom: -8px;
+				left: 0;
+				width: 100px;
+				height: 3px;
+				background: var(--blue-color);
+				border-radius: 2px;
+			}
+
+			@media (max-width: 900px) {
+				font-size: 1.6rem;
+			}
+		}
+
+		ul {
+			@include flex-col(1rem, stretch, flex-start);
+			padding-bottom: 2rem;
+			margin: 2rem 0;
+			background: transparent;
+			border-bottom: 1px solid var(--transparent-light-color);
+
+			li {
+				background: transparent;
+				padding: 0.8rem 1rem 0.8rem 2.5rem;
+				color: var(--background-color);
+				font-size: 1.3rem;
+				font-weight: 400;
+				line-height: 1.4;
+				position: relative;
+				transition: all 0.3s ease;
+				border-radius: 8px;
+
+				&:hover {
+					background: rgba(255, 255, 255, 0.05);
+					padding-left: 3rem;
+					color: var(--orange-color);
+				}
+
+				&::before {
+					content: "🟧";
+					position: absolute;
+					left: 0.5rem;
+					top: 50%;
+					transform: translateY(-50%);
+					font-size: 1.1rem;
+				}
+
+				@media (max-width: 900px) {
+					font-size: 1.1rem;
+					padding: 0.6rem 0.8rem 0.6rem 2.2rem;
+				}
+			}
+		}
+
+		h3 {
+			background: transparent;
+			color: var(--blue-color);
+			font-size: 1.5rem;
+			font-weight: 600;
+			margin: 2rem 0 1rem 0;
+			padding-left: 1rem;
+			border-left: 3px solid var(--orange-color);
+
+			@media (max-width: 900px) {
+				font-size: 1.3rem;
+			}
+		}
+
+		p {
+			padding-left: 1rem;
+			margin-bottom: 2rem;
+			background: transparent;
+			color: var(--background-color);
+			font-size: 1.1rem;
+			font-weight: 300;
+			line-height: 1.6;
+			transition: all 0.3s ease;
+
+			&:hover {
+				padding-left: 1.5rem;
+				background: rgba(255, 255, 255, 0.02);
+				border-radius: 8px;
+			}
+
+			@media (max-width: 900px) {
+				font-size: 1rem;
+				line-height: 1.5;
+			}
+		}
+	}
+}
