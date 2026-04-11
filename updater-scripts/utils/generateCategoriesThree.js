@@ -1,31 +1,31 @@
 export default function generateCategoriesThree(allLoadedCategoriesData) {
-    console.info("generating categories three object");
-    const categoriesList = [];
+	console.info("generating categories three object");
+	const categoriesList = [];
 
-    allLoadedCategoriesData.map((category) => {
-        categoriesList.push({
-            name: category.name,
-            slug: category.slug,
-            id: category.id,
-            parent: category.parent,
-            count: category.count,
-        });
-    });
+	allLoadedCategoriesData.map((category) => {
+		categoriesList.push({
+			name: category.name,
+			slug: category.slug,
+			id: category.id,
+			parent: category.parent,
+			count: category.count,
+		});
+	});
 
-    const categoriesThree = [];
+	const categoriesThree = [];
 
-    categoriesList.map((category) => {
-        if (category.parent === 0 && category.count !== 0)
-            categoriesThree.push({ ...category, childrens: [] });
-    });
+	categoriesList.map((category) => {
+		if (category.parent === 0 && category.count !== 0)
+			categoriesThree.push({ ...category, children: [] });
+	});
 
-    categoriesList.map((categoryInList) => {
-        categoriesThree.map((categoryInThree, index) => {
-            if (categoryInThree.id === categoryInList.parent && categoryInList.count !== 0)
-                categoriesThree[index].childrens?.push(categoryInList);
-        });
-    });
+	categoriesList.map((categoryInList) => {
+		categoriesThree.map((categoryInThree, index) => {
+			if (categoryInThree.id === categoryInList.parent && categoryInList.count !== 0)
+				categoriesThree[index].children?.push(categoryInList);
+		});
+	});
 
-    console.info("categories three are builded");
-    return categoriesThree;
+	console.info("categories three are builded");
+	return categoriesThree;
 }
