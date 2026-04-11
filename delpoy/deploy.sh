@@ -9,10 +9,10 @@ YELLOW='\033[1;33m'
 NC='\033[0m'
 
 # Путь к сайту (можно передать как аргумент или задать по умолчанию)
-SITE_DIR="${1:-/var/www/kitkars}"
+SITE_DIR="/var/www/kitkars/kitkars.ru"
 ENV_FILE="$SITE_DIR/.env"
-COMPOSE_FILE="$SITE_DIR/docker-compose.yml"
-SCRIPTS_DIR="$SITE_DIR/shared-scripts"
+COMPOSE_FILE="$SITE_DIR/docker-compose.yaml"
+SCRIPTS_DIR="/var/www/kitkars/shared-scripts"
 
 echo -e "${GREEN}🚀 Настройка сайта в $SITE_DIR${NC}"
 
