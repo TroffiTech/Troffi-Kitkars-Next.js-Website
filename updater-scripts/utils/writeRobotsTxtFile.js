@@ -8,7 +8,7 @@ Allow: /*
 Allow: /catalog/product/*
 Disallow: /checkout/
 Disallow: /catalog/search/
-Sitemap: ${process.env.DOMEN}/sitemap.xml`;
+Sitemap: ${process.env.DOMEN || "https://kitkars.ru"}/sitemap.xml`;
 
 		const filePath = path.join(outputDir, "robots.txt");
 		await fs.writeFile(filePath, content, { encoding: "utf8" });
