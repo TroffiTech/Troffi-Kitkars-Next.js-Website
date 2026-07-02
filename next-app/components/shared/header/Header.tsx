@@ -23,7 +23,7 @@ export default function Header() {
 	const [isScrolled, setIsScrolled] = useState(false);
 
 	function setView() {
-		if (checkIsMobile() || window.innerWidth <= 900) setIsMobile(true);
+		if (checkIsMobile() || window.innerWidth <= 1100) setIsMobile(true);
 		else setIsMobile(false);
 	}
 
@@ -48,7 +48,10 @@ export default function Header() {
 	return (
 		<header className={headerClass}>
 			{isMobile && (
-				<MobileHeader isMenuVisible={isMenuVisible} setIsMenuVisible={setIsMenuVisible} />
+				<MobileHeader
+					isMenuVisible={isMenuVisible}
+					setIsMenuVisible={setIsMenuVisible}
+				/>
 			)}
 			{!isMobile && <DesctopHeader />}
 		</header>
@@ -65,7 +68,8 @@ function DesctopHeader() {
 
 		if (category.children)
 			for (const childrenCategory of category.children) {
-				if (childrenCategory.slug === slugFromPathname) return "var(--orange-color)";
+				if (childrenCategory.slug === slugFromPathname)
+					return "var(--orange-color)";
 			}
 		return "var(--foreground-color)";
 	}
@@ -108,7 +112,12 @@ function DesctopHeader() {
 				<ul className={styles.header_categoryLinks}>
 					{data &&
 						data.map((category: Category, index: number) => (
-							<li key={index} className={isCategoryActive(category) ? styles.activeCategory : ""}>
+							<li
+								key={index}
+								className={
+									isCategoryActive(category) ? styles.activeCategory : ""
+								}
+							>
 								<Link
 									style={{
 										color: generateLinkColor(category),
