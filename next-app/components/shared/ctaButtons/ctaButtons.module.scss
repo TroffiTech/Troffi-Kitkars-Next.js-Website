@@ -1,6 +1,6 @@
 .callBackButton_background {
 	position: relative;
-	width: 20rem;
+	width: 15rem;
 	height: 3.5rem;
 
 	background: var(--orange-color); // Изначальная заливка
@@ -56,6 +56,7 @@
 // Стрелка
 .callBackButton::after {
 	content: "→";
+	transform: translateY(-4px);
 	color: var(--background-color); // Изначально белая стрелка
 	font-size: 1.1rem;
 	transition: all 0.3s ease;
