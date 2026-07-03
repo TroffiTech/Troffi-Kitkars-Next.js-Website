@@ -70,25 +70,15 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Download Build Artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: app-build
-
-      - name: Debug - check files
-        run: |
-          pwd
-          ls -la
-          ls -la build.tar.gz || echo "build.tar.gz NOT FOUND"
-          ls -la .next 2>/dev/null || echo ".next NOT FOUND"
-
       - name: Checkout branch "no-docker" # New runner for copying updater-scripts
         uses: actions/checkout@v4
         with:
           ref: no-docker
 
-      - name: Repackage for SCP
-        run: tar -czf build.tar.gz .
+      - name: Download Build Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: app-build
 
       - name: Copy updater-scripts to Production Server
         uses: appleboy/scp-action@v0.1.7
