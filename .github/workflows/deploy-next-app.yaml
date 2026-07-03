@@ -81,18 +81,6 @@ jobs:
         with:
           name: app-build
 
-      - name: Copy updater-scripts to server
-        uses: appleboy/scp-action@v0.1.7
-        with:
-          host: ${{ secrets.SERVER_HOST }}
-          username: ${{ secrets.SERVER_USER }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          port: ${{ secrets.SSH_PORT || '22' }}
-          source: "updater-scripts/."
-          target: "/var/www/kitkars/shared-scripts/"
-          strip_components: 0
-          overwrite: true
-
       - name: Copy build artifact to server
         uses: appleboy/scp-action@v0.1.7
         with:
@@ -116,30 +104,10 @@ jobs:
             #!/bin/bash
             set -e
 
-            SCRIPTS_DIR="/var/www/kitkars/shared-scripts/updater-scripts"
             SITE_DIR="/var/www/kitkars/kitkars.ru"
             CONTENT_DIR="/var/www/kitkars/content-data"
 
-            echo "🚀 Starting deployment..."
-
-            # 1. Run updater scripts
-            if [ -d "$SCRIPTS_DIR" ] && [ -f "$SCRIPTS_DIR/updateContent.js" ]; then
-              echo "🔄 Running updater scripts..."
-              cd "$SCRIPTS_DIR"
-
-              if [ -f "package.json" ]; then
-                npm install --production --silent 2>/dev/null || true
-              fi
-
-              node updateContent.js \
-                "/var/www/kitkars/.env" \
-                "$CONTENT_DIR" || echo "⚠️  Updater scripts failed, continuing..."
-
-              echo "✅ Content update done"
-              ls -la "$CONTENT_DIR" 2>/dev/null || echo "Content dir not found"
-            else
-              echo "⚠️  Updater scripts not found, skipping..."
-            fi
+            echo "🚀 Starting deployment...
 
             # 2. Deploy application
             cd "$SITE_DIR"
