@@ -71,15 +71,15 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Download Build Artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: app-build
-
       - name: Checkout repository for updater-scripts
         uses: actions/checkout@v4
         with:
           ref: no-docker
+
+      - name: Download Build Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: app-build
 
       - name: Copy updater-scripts to server
         uses: appleboy/scp-action@v0.1.7
