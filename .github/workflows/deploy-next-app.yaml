@@ -1,4 +1,4 @@
-name: Build and Deploy Kitkars Next.jd App
+name: Build and Deploy Kitkars Next.js App
 on:
   push:
     branches: [no-docker]
@@ -27,6 +27,7 @@ jobs:
         working-directory: ./next-app
         run: |
           cat > .env << 'EOF'
+          CONTENT_PATH=/var/www/kitkars/content-data
           CITY_LOCATION=Ижевск
           DOMEN=https://kitkars.ru
           MAIN_TEL=+7 (922) 520-77-71
@@ -53,7 +54,7 @@ jobs:
           mkdir -p ../artifact
           mv .next ../artifact
           mv node_modules ../artifact
-          mv public ../artifact
+          mv public ../artifact 2>/dev/null || true
           mv package.json ../artifact
           cd ..
           tar -czf build.tar.gz -C artifact .
@@ -65,22 +66,22 @@ jobs:
           path: build.tar.gz
 
   deploy:
-    name: Transmit App Files from Runner to Production Server
+    name: Deploy to Production Server
     needs: build
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout branch "no-docker" # New runner for copying updater-scripts
-        uses: actions/checkout@v4
-        with:
-          ref: no-docker
-
       - name: Download Build Artifact
         uses: actions/download-artifact@v4
         with:
           name: app-build
 
-      - name: Copy updater-scripts to Production Server
+      - name: Checkout repository for updater-scripts
+        uses: actions/checkout@v4
+        with:
+          ref: no-docker
+
+      - name: Copy updater-scripts to server
         uses: appleboy/scp-action@v0.1.7
         with:
           host: ${{ secrets.SERVER_HOST }}
@@ -89,7 +90,7 @@ jobs:
           port: ${{ secrets.SSH_PORT || '22' }}
           source: "updater-scripts/."
           target: "/var/www/kitkars/shared-scripts/"
-          strip_components: 0
+          strip_components: 1
           overwrite: true
 
       - name: Copy build artifact to server
@@ -99,7 +100,7 @@ jobs:
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: ${{ secrets.SSH_PORT || '22' }}
-          source: "build.tar.gz"
+          source: "./build.tar.gz"
           target: "/var/www/kitkars/kitkars.ru/"
 
       - name: Deploy and restart application
@@ -109,23 +110,39 @@ jobs:
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: ${{ secrets.SSH_PORT || '22' }}
+          timeout: 120s
+          command_timeout: 60s
           script: |
             #!/bin/bash
             set -e
-            # 1. Run updater-scripts
-            echo "🔄 Running updater scripts..."
 
-            cd /var/www/kitkars/shared-scripts/updater-scripts
-            if [ -f "package.json" ]; then
-              npm install
+            SCRIPTS_DIR="/var/www/kitkars/shared-scripts"
+            SITE_DIR="/var/www/kitkars/kitkars.ru"
+            CONTENT_DIR="/var/www/kitkars/content-data"
+
+            echo "🚀 Starting deployment..."
+
+            # 1. Run updater scripts
+            if [ -d "$SCRIPTS_DIR" ] && [ -f "$SCRIPTS_DIR/updateContent.js" ]; then
+              echo "🔄 Running updater scripts..."
+              cd "$SCRIPTS_DIR"
+
+              if [ -f "package.json" ]; then
+                npm install --production --silent 2>/dev/null || true
+              fi
+
+              node updateContent.js \
+                "/var/www/kitkars/.env" \
+                "$CONTENT_DIR" || echo "⚠️  Updater scripts failed, continuing..."
+
+              echo "✅ Content update done"
+              ls -la "$CONTENT_DIR" 2>/dev/null || echo "Content dir not found"
+            else
+              echo "⚠️  Updater scripts not found, skipping..."
             fi
 
-            node /var/www/kitkars/shared-scripts/updater-scripts/updateContent.js \
-              /var/www/kitkars/.env\
-              /var/www/kitkars/content-data
-
-            # 2. Update App
-            cd /var/www/kitkars/kitkars.ru
+            # 2. Deploy application
+            cd "$SITE_DIR"
 
             echo "📦 Extracting build artifact..."
             mkdir -p new-deploy
@@ -134,6 +151,16 @@ jobs:
 
             echo "🛑 Stopping current app..."
             pm2 stop kitkars-app 2>/dev/null || true
+            pm2 delete kitkars-app 2>/dev/null || true
+
+            # Убиваем старый процесс если висит на порту
+            echo "🔍 Checking port 30080..."
+            PORT_PID=$(ss -tlnp | grep ':30080' | grep -oP 'pid=\K[0-9]+' 2>/dev/null || true)
+            if [ -n "$PORT_PID" ]; then
+              echo "⚠️  Killing process on port 30080 (PID: $PORT_PID)..."
+              kill -9 "$PORT_PID" 2>/dev/null || true
+              sleep 1
+            fi
 
             echo "🔄 Swapping files..."
             rm -rf .next node_modules public package.json
@@ -143,12 +170,10 @@ jobs:
             mv new-deploy/package.json package.json
             rm -rf new-deploy
 
-            # 3. Launching App
+            # 3. Launch application
             echo "🚀 Starting app with PM2..."
-            PORT=30080 pm2 start npm \
-              --name kitkars-app \
-              -- start 
-
+            cd "$SITE_DIR"
+            PORT=30080 pm2 start npm --name kitkars-app -- start
             pm2 save
 
             echo "✅ Deployment completed!"
