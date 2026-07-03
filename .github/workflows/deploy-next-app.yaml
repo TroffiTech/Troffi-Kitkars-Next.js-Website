@@ -107,7 +107,7 @@ jobs:
             SITE_DIR="/var/www/kitkars/kitkars.ru"
             CONTENT_DIR="/var/www/kitkars/content-data"
 
-            echo "🚀 Starting deployment...
+            echo "🚀 Starting deployment..."
 
             # 2. Deploy application
             cd "$SITE_DIR"
