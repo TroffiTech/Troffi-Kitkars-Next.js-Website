@@ -4,7 +4,6 @@
 # Next.js App
 /next-app/node_modules
 /next-app/.next
-/next-app/package-lock.json
 
 # Updaters
 /updater-scripts/node_modules
