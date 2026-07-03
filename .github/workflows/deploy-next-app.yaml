@@ -1,71 +1,86 @@
-name: Build and Deploy Next.js App
-
+name: Build and Deploy Kitkars Next.jd App
 on:
   push:
-    branches: [main]
-    paths:
-      - "next-app/**"
-      - "updater-scripts/**"
-      - ".github/workflows/deploy-next-app.yml"
+    branches: [no-docker]
   workflow_dispatch:
 
-env:
-  REGISTRY: ghcr.io
-  IMAGE_NAME: ${{ github.repository }}/next-app
-
 jobs:
-  build-and-push:
-    name: Build and Push Docker Image
+  build:
+    name: Build App on CI-runner
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      packages: write
-
     steps:
-      - name: Checkout repository
+      - name: Checkout branch "no-docker"
         uses: actions/checkout@v4
-
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-
-      - name: Log in to GitHub Container Registry
-        uses: docker/login-action@v3
         with:
-          registry: ${{ env.REGISTRY }}
-          username: ${{ github.actor }}
-          password: ${{ secrets.GHCR_TOKEN }}
+          ref: no-docker
 
-      - name: Extract metadata for Docker
-        id: meta
-        uses: docker/metadata-action@v5
+      - name: Install Node.js
+        uses: actions/setup-node@v4
         with:
-          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
-          tags: |
-            type=raw,value=latest
-            type=sha,format=short
+          node-version: "20"
 
-      - name: Build and push Docker image
-        uses: docker/build-push-action@v5
+      - name: Install Dependencies
+        working-directory: ./next-app
+        run: npm ci
+
+      - name: Create .env file
+        working-directory: ./next-app
+        run: |
+          cat > .env << 'EOF'
+          CITY_LOCATION=Ижевск
+          DOMEN=https://kitkars.ru
+          MAIN_TEL=+7 (922) 520-77-71
+          SITE_NAME=Китайский тюнинг
+          ADDRESS=Ижевск, пер.Спартаковский, д. 8
+
+          FIRST_MANAGER_TEL=+7 (922) 520-77-71
+          FIRST_MANAGER_NAME=Зорин Сергей
+          FIRST_MANAGER_EMAIL=zsa@troffi.ru
+          SECOND_MANAGER_TEL=+7 (922) 513-26-00
+          SECOND_MANAGER_NAME=Бушмелев Александр
+          SECOND_MANAGER_EMAIL=bam@troffi.ru
+          EOF
+
+          echo "BITRIX_KEY=${{ secrets.BITRIX_KEY }}" >> .env
+
+      - name: Run npm build
+        working-directory: ./next-app
+        run: npm run build
+
+      - name: Package Build Artifact
+        run: |
+          cd next-app
+          mkdir -p ../artifact
+          mv .next ../artifact
+          mv node_modules ../artifact
+          mv public ../artifact
+          mv package.json ../artifact
+          cd ..
+          tar -czf build.tar.gz -C artifact .
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
         with:
-          context: ./next-app
-          push: true
-          tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
+          name: build
+          path: build.tar.gz
 
   deploy:
-    name: Deploy to Production Server
-    needs: build-and-push
+    name: Transmit App Files from Runner to Production Server
+    needs: build
     runs-on: ubuntu-latest
-    if: success()
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+      - name: Download Build Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: build
 
-      # Шаг 1: Копируем скрипты обновления на сервер
-      - name: Copy updater scripts via SCP
+      - name: Checkout branch "no-docker" # New runner for copying updater-scripts
+        uses: actions/checkout@v4
+        with:
+          ref: no-docker
+
+      - name: Copy updater-scripts to Production Server
         uses: appleboy/scp-action@v0.1.7
         with:
           host: ${{ secrets.SERVER_HOST }}
@@ -77,8 +92,17 @@ jobs:
           strip_components: 0
           overwrite: true
 
-      # Шаг 2: Выполняем деплой через SSH
-      - name: Deploy via SSH
+      - name: Copy build artifact to server
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: ${{ secrets.SSH_PORT || '22' }}
+          source: "build.tar.gz"
+          target: "/var/www/kitkars/kitkars.ru/"
+
+      - name: Deploy and restart application
         uses: appleboy/ssh-action@v1.0.0
         with:
           host: ${{ secrets.SERVER_HOST }}
@@ -89,28 +113,59 @@ jobs:
             #!/bin/bash
             set -e
 
-            REGISTRY="ghcr.io"
-            REPO="troffitech/troffi-kitkars-next.js-website"
-            IMAGE="next-app"
-            FULL_IMAGE="${REGISTRY}/${REPO}/${IMAGE}:latest"
+            SITE_DIR="/var/www/kitkars/kitkars.ru"
+            SCRIPTS_DIR="/var/www/kitkars/shared-scripts"
+            CONTENT_DIR="/var/www/kitkars/content-data"
 
             echo "🚀 Starting deployment..."
-            echo "Pulling image: $FULL_IMAGE"
-            docker pull "$FULL_IMAGE"
 
-            # Перезапускаем контейнер
-            SITE_DIR="/var/www/kitkars/kitkars.ru"
-            if [ -f "${SITE_DIR}/docker-compose.yaml" ]; then
-              echo "🔄 Restarting site in ${SITE_DIR}"
-              cd "$SITE_DIR"
-              docker compose down
-              docker compose up -d
-              cd - > /dev/null
-            else
-              echo "❌ docker-compose.yml not found in ${SITE_DIR}"
-              exit 1
+            # 0. Check and instsall PM2 if not exist
+            if ! command -v pm2 &> /dev/null; then
+              echo "📦 Installing PM2..."
+              npm install -g pm2
             fi
 
-            docker image prune -f
+            # 1. Run updater-scripts
+            echo "🔄 Running updater scripts..."
+            cd "$SCRIPTS_DIR"
+
+            if [ -f "package.json" ]; then
+              npm ci --production
+            fi
+
+            node updateContent.js \
+              "/var/www/kitkars/.env" \
+              "$CONTENT_DIR"
+
+            echo "✅ Content generated successfully"
+            ls -la "$CONTENT_DIR"
+
+            # 2. Update App
+            cd "$SITE_DIR"
+
+            echo "📦 Extracting build artifact..."
+            mkdir -p new-deploy
+            tar -xzf build.tar.gz -C new-deploy/
+            rm build.tar.gz
+
+            echo "🛑 Stopping current app..."
+            pm2 stop kitkars-app 2>/dev/null || true
+
+            echo "🔄 Swapping files..."
+            rm -rf .next node_modules public package.json
+            mv new-deploy/.next .next
+            mv new-deploy/node_modules node_modules
+            mv new-deploy/public public 2>/dev/null || true
+            mv new-deploy/package.json package.json
+            rm -rf new-deploy
+
+            # 3. Launching App
+            echo "🚀 Starting app with PM2..."
+            PORT=30080 pm2 start npm \
+              --name kitkars-app \
+              -- start 
+
+            pm2 save
+
             echo "✅ Deployment completed!"
-            docker ps --format "table {{.Names}}\t{{.Status}}" | grep nextjs || true
+            pm2 status | grep kitkars-app
