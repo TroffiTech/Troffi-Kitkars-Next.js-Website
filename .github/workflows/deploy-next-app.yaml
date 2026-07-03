@@ -80,6 +80,9 @@ jobs:
         with:
           ref: no-docker
 
+      - name: Repackage for SCP
+        run: tar -czf build.tar.gz .
+
       - name: Copy updater-scripts to Production Server
         uses: appleboy/scp-action@v0.1.7
         with:
