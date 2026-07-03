@@ -115,6 +115,7 @@ jobs:
             # 1. Run updater-scripts
             echo "🔄 Running updater scripts..."
 
+            cd /var/www/kitkars/shared-scripts/updater-scripts
             if [ -f "package.json" ]; then
               npm install
             fi
