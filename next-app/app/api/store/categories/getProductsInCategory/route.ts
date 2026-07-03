@@ -43,7 +43,10 @@ function findAllChildrenCategories(
 	return Array.from(result);
 }
 
-function isCarCategory(categoryId: number, categoryMap: Map<number, Category>): boolean {
+function isCarCategory(
+	categoryId: number,
+	categoryMap: Map<number, Category>,
+): boolean {
 	let current = categoryMap.get(categoryId);
 
 	while (current && current.parent !== 0) {
@@ -64,8 +67,10 @@ export async function GET(req: Request) {
 		order === "increase" ? +a.price - +b.price : +b.price - +a.price,
 	);
 
-	if (!allProducts) throw new Error("Endpoint: Failed to read AllProducts.json");
-	if (!categoriesThree) throw new Error("Endpoint: Failed to read categoriesThree");
+	if (!allProducts)
+		throw new Error("Endpoint: Failed to read AllProducts.json");
+	if (!categoriesThree)
+		throw new Error("Endpoint: Failed to read categoriesThree");
 
 	const allCategoriesFlat = flattenCategories(categoriesThree);
 	const categoryMap = new Map<number, Category>();
@@ -76,7 +81,10 @@ export async function GET(req: Request) {
 		.map((item) => +item.trim())
 		.filter((id) => !isNaN(id));
 
-	const expandedCategories = findAllChildrenCategories(categoriesIds, categoryMap);
+	const expandedCategories = findAllChildrenCategories(
+		categoriesIds,
+		categoryMap,
+	);
 
 	const carCategories: number[] = [];
 	const productCategories: number[] = [];
@@ -92,21 +100,26 @@ export async function GET(req: Request) {
 	const data: Product[] = [];
 
 	for (const product of allProducts) {
-		const productCategoryIds = product.categories.map((category: Category) => category.id);
+		const productCategoryIds = product.categories.map(
+			(category: Category) => category.id,
+		);
 
 		let carMatch = true;
 		if (carCategories.length > 0) {
-			carMatch = productCategoryIds.some((id: number) => carCategories.includes(id));
+			carMatch = productCategoryIds.some((id: number) =>
+				carCategories.includes(id),
+			);
 		}
 
 		let productMatch = true;
 		if (productCategories.length > 0) {
-			productMatch = productCategoryIds.some((id: number) => productCategories.includes(id));
+			productMatch = productCategoryIds.some((id: number) =>
+				productCategories.includes(id),
+			);
 		}
 
 		if (carMatch && productMatch) {
 			data.push(product);
-			console.log(product.categories);
 		}
 	}
 
