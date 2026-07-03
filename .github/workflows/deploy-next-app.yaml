@@ -75,6 +75,13 @@ jobs:
         with:
           name: app-build
 
+      - name: Debug - check files
+        run: |
+          pwd
+          ls -la
+          ls -la build.tar.gz || echo "build.tar.gz NOT FOUND"
+          ls -la .next 2>/dev/null || echo ".next NOT FOUND"
+
       - name: Checkout branch "no-docker" # New runner for copying updater-scripts
         uses: actions/checkout@v4
         with:
