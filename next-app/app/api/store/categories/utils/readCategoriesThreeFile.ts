@@ -1,7 +1,8 @@
 import fs from "fs/promises";
 import path from "path";
 
-const CONTENT_PATH = process.env.CONTENT_PATH || "/var/www/kitkars/content";
+const CONTENT_PATH =
+	process.env.CONTENT_PATH || "/var/www/kitkars/content-data";
 const CATEGORIES_FILE = "categoriesThree.json";
 
 export default async function readCategoriesThreeFile() {
