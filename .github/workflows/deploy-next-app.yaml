@@ -114,7 +114,7 @@ jobs:
             set -e
 
             SITE_DIR="/var/www/kitkars/kitkars.ru"
-            SCRIPTS_DIR="/var/www/kitkars/shared-scripts"
+            SCRIPTS_DIR="/var/www/kitkars/shared-scripts/updater-scripts"
             CONTENT_DIR="/var/www/kitkars/content-data"
 
             echo "🚀 Starting deployment..."
@@ -124,7 +124,7 @@ jobs:
             cd "$SCRIPTS_DIR"
 
             if [ -f "package.json" ]; then
-              npm ci --production
+              npm install
             fi
 
             node updateContent.js \
