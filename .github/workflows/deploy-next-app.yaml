@@ -112,30 +112,19 @@ jobs:
           script: |
             #!/bin/bash
             set -e
-
-            SITE_DIR="/var/www/kitkars/kitkars.ru"
-            SCRIPTS_DIR="/var/www/kitkars/shared-scripts/updater-scripts"
-            CONTENT_DIR="/var/www/kitkars/content-data"
-
-            echo "🚀 Starting deployment..."
-
             # 1. Run updater-scripts
             echo "🔄 Running updater scripts..."
-            cd "$SCRIPTS_DIR"
 
             if [ -f "package.json" ]; then
               npm install
             fi
 
-            node updateContent.js \
-              "/var/www/kitkars/.env" \
-              "$CONTENT_DIR"
-
-            echo "✅ Content generated successfully"
-            ls -la "$CONTENT_DIR"
+            node /var/www/kitkars/shared-scripts/updater-scripts/updateContent.js \
+              /var/www/kitkars/.env\
+              /var/www/kitkars/content-data
 
             # 2. Update App
-            cd "$SITE_DIR"
+            cd /var/www/kitkars/kitkars.ru
 
             echo "📦 Extracting build artifact..."
             mkdir -p new-deploy
