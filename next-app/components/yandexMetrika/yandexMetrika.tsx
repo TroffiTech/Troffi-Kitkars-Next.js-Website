@@ -1,61 +1,59 @@
 "use client";
 
-import React, { useCallback, useEffect } from "react";
-import ym, { YMInitializer } from "react-yandex-metrika";
-import Router from "next/router";
+import { useEffect } from "react";
+import { usePathname, useSearchParams } from "next/navigation";
 
-const counterID = process.env.YANDEX_METRIKA_COUNTER_ID;
+declare global {
+	interface Window {
+		ym: (counterId: number, action: string, ...args: any[]) => void;
+	}
+}
 
-type Props = {
-	enabled: boolean;
-};
-
-const YandexMetrikaContainer: React.FC<Props> = ({ enabled }) => {
-	const hit = useCallback(
-		(url: string) => {
-			if (!enabled || typeof window === "undefined") {
-				console.log(`%c[YandexMetrika](HIT)`, `color: orange`, url);
-				return;
-			}
-
-			if (typeof ym !== "function" || !counterID) {
-				console.warn("Yandex.Metrika not initialized or counterID missing");
-				return;
-			}
-			ym(counterID, "hit", url);
-		},
-		[enabled],
-	);
+export function YandexMetrica() {
+	const pathname = usePathname();
+	const searchParams = useSearchParams();
 
 	useEffect(() => {
-		if (!counterID || !enabled) return;
+		const counterId = Number(process.env.NEXT_PUBLIC_YANDEX_METRIKA_ID);
 
-		const handleRouteChange = (url: string) => hit(url);
+		if (!counterId) return;
 
-		hit(window.location.pathname + window.location.search);
+		const script = document.createElement("script");
+		script.innerHTML = `
+      (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+      m[i].l=1*new Date();
+      for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
+      k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})
+      (window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
+      
+      ym(${counterId}, "init", {
+        clickmap:true,
+        trackLinks:true,
+        accurateTrackBounce:true,
+        webvisor:true
+      });
+    `;
+		document.head.appendChild(script);
 
-		Router.events.on("routeChangeComplete", handleRouteChange);
+		const noscript = document.createElement("noscript");
+		noscript.innerHTML = `<div><img src="https://mc.yandex.ru/watch/${counterId}" style="position:absolute; left:-9999px;" alt="" /></div>`;
+		document.body.appendChild(noscript);
 
 		return () => {
-			Router.events.off("routeChangeComplete", handleRouteChange);
+			document.head.removeChild(script);
+			document.body.removeChild(noscript);
 		};
-	}, [hit, enabled]);
+	}, []);
 
-	if (!counterID || !enabled) return null;
+	useEffect(() => {
+		const counterId = Number(process.env.NEXT_PUBLIC_YANDEX_METRIKA_ID);
+		if (!counterId || !window.ym) return;
 
-	return (
-		<YMInitializer
-			accounts={[Number(counterID)]}
-			options={{
-				defer: false,
-				webvisor: true,
-				clickmap: true,
-				trackLinks: true,
-				accurateTrackBounce: true,
-			}}
-			version="2"
-		/>
-	);
-};
+		const url =
+			pathname +
+			(searchParams?.toString() ? `?${searchParams.toString()}` : "");
+		window.ym(counterId, "hit", url);
+	}, [pathname, searchParams]);
 
-export default YandexMetrikaContainer;
+	return null;
+}

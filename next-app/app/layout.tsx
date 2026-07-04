@@ -1,15 +1,8 @@
+import { YandexMetrica } from "@/components/yandexMetrika/yandexMetrika";
 import { Manrope } from "next/font/google";
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import "./globals.css";
-import fs from "fs";
-import path from "path";
-import dotenv from "dotenv";
-import YandexMetrikaContainer from "@/components/yandexMetrika/yandexMetrika";
-
-const envPath = path.join(process.cwd(), ".env");
-if (fs.existsSync(envPath)) {
-	dotenv.config({ path: envPath });
-}
 
 const montserratSans = Manrope({
 	variable: "--font-montserrat-sans",
@@ -38,10 +31,10 @@ export default function RootLayout({
 				/>
 			</head>
 			<body className={`${montserratSans.className}`}>
+				<Suspense fallback={null}>
+					<YandexMetrica />
+				</Suspense>
 				{children}
-				{/* <Analytics />
-                <SpeedInsights /> */}
-				<YandexMetrikaContainer enabled={true} />
 			</body>
 		</html>
 	);
