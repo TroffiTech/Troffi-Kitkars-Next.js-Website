@@ -27,8 +27,6 @@ export default function CarModelsFilter({
 		fetcher,
 	);
 
-	console.log(data, brand);
-
 	const handleToggle = (slug: string) => {
 		const nextSelection = new Set(selectedModels);
 

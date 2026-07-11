@@ -20,7 +20,17 @@ export default function CategoryItem({
 	selectedCategories,
 	onCategoryToggle,
 }: CategoryItemProps) {
-	const [isExpanded, setIsExpanded] = useState(level < 1);
+	const [isManuallyExpanded, setIsManuallyExpanded] = useState(false);
+	const hasSelectedDescendant = (category: Category): boolean => {
+		return (
+			category.children?.some(
+				(child) =>
+					selectedCategories.has(child.slug) || hasSelectedDescendant(child),
+			) ?? false
+		);
+	};
+
+	const isExpanded = isManuallyExpanded || hasSelectedDescendant(category);
 
 	const hasChildren = (category.children?.length ?? 0) > 0;
 	const isSelected = selectedCategories.has(category.slug);
@@ -28,7 +38,7 @@ export default function CategoryItem({
 	const handleTitleClick = () => {
 		if (!hasChildren) return;
 
-		setIsExpanded((prev) => !prev);
+		setIsManuallyExpanded((prev) => !prev);
 	};
 
 	const handleCheckboxChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -38,7 +48,7 @@ export default function CategoryItem({
 
 	const handleArrowClick = (e: MouseEvent<HTMLButtonElement>) => {
 		e.stopPropagation();
-		setIsExpanded((prev) => !prev);
+		setIsManuallyExpanded((prev) => !prev);
 	};
 
 	return (

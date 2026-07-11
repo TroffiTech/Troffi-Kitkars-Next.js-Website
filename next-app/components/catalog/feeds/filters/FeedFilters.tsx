@@ -1,114 +1,80 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 import CarModelsFilter from "./CarModelsFilter";
 import CategoryFilter from "./CategoryNavigator";
 
 import styles from "./filters.module.scss";
-
-type FiltersState = {
-	models: string[];
-	categories: string[];
-};
+import { buildRoute, parseRoute } from "@/lib/routeParser";
 
 export default function FeedFilters() {
-	const pathname = usePathname();
 	const router = useRouter();
+	const pathname = usePathname();
 	const searchParams = useSearchParams();
-
-	const brand = useMemo(
-		() => pathname.split("/").filter(Boolean)[0] ?? "",
-		[pathname],
+	const parsedRoute = parseRoute(
+		pathname,
+		new URLSearchParams(searchParams.toString()),
 	);
 
-	const pathCategories = useMemo(
-		() => pathname.split("/").filter(Boolean).slice(1),
-		[pathname],
+	const brand = parsedRoute.brand || "";
+	const categories = parsedRoute.categories || [];
+	const models = parsedRoute.models || [];
+
+	const handleModelsChange = useCallback(
+		(models: string[]) => {
+			router.push(
+				buildRoute({
+					...parsedRoute,
+					models,
+				}),
+				{ scroll: false },
+			);
+		},
+		[parsedRoute, router],
 	);
 
-	const [filters, setFilters] = useState<FiltersState>({
-		models: [],
-		categories: [],
-	});
-
-	useEffect(() => {
-		setFilters({
-			models:
-				searchParams
-					?.get("model")
-					?.split(",")
-					.map((slug) => slug.trim())
-					.filter(Boolean) ?? [],
-
-			// Later we'll initialize these from the URL/path.
-			categories: [],
-		});
-	}, [searchParams]);
-
-	const handleModelsChange = useCallback((models: string[]) => {
-		setFilters((prev) => ({
-			...prev,
-			models,
-		}));
-	}, []);
-
-	const handleCategoriesChange = useCallback((categories: string[]) => {
-		setFilters((prev) => ({
-			...prev,
-			categories,
-		}));
-	}, []);
-
-	const applyFilters = useCallback(() => {
-		const params = new URLSearchParams(searchParams?.toString());
-
-		if (filters.models.length) {
-			params.set("model", filters.models.join(","));
-		} else {
-			params.delete("model");
-		}
-
-		// Build the new pathname from the selected category tree.
-		// We'll improve this in the next step.
-		const nextPath =
-			filters.categories.length > 0 ?
-				`/${brand}/${filters.categories.join("/")}`
-			:	`/${brand}`;
-
-		router.push(`${nextPath}${params.toString() ? `?${params}` : ""}`, {
-			scroll: false,
-		});
-	}, [brand, filters, router, searchParams]);
+	const handleCategoriesChange = useCallback(
+		(categories: string[]) => {
+			router.push(
+				buildRoute({
+					...parsedRoute,
+					categories,
+				}),
+				{ scroll: false },
+			);
+		},
+		[parsedRoute, router],
+	);
 
 	const clearFilters = useCallback(() => {
-		setFilters({
-			models: [],
-			categories: [],
-		});
-
-		router.push(`/${brand}`, {
-			scroll: false,
-		});
+		router.push(
+			buildRoute({
+				brand,
+				categories: [],
+				models: [],
+			}),
+			{ scroll: false },
+		);
 	}, [brand, router]);
 
 	return (
 		<div className={styles.filters}>
 			<CarModelsFilter
 				brand={brand}
-				selectedModels={filters.models}
+				selectedModels={models}
 				onChange={handleModelsChange}
 			/>
 
 			<CategoryFilter
-				selectedCategories={filters.categories}
+				selectedCategories={categories}
 				onSelectionChange={handleCategoriesChange}
 			/>
-
+			{/* 
 			<button className={styles.submitBtn} onClick={applyFilters}>
 				Применить фильтры
-			</button>
+			</button> */}
 
 			<button className={styles.clearBtn} onClick={clearFilters}>
 				Сбросить
