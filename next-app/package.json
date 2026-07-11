@@ -5,7 +5,7 @@
 	"type": "module",
 	"author": "Kirill Poskrebyshev",
 	"scripts": {
-		"dev": "next dev --turbopack",
+		"dev": "next dev",
 		"build": "next build",
 		"start": "next start",
 		"update": "node scripts/updateContent.js"

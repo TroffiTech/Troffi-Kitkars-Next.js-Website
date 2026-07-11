@@ -38,4 +38,4 @@ export type Category = {
 	children: Category[];
 };
 
-export type CategoriesThree = Array<Category>;
+export type CategoriesTree = Array<Category>;

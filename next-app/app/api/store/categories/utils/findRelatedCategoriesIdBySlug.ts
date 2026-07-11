@@ -1,12 +1,12 @@
-import { CategoriesThree } from "@/types/productsType";
+import { CategoriesTree } from "@/types/productsType";
 
 export default function findRelatedCategoriesIdBySlug(
-	categoriesThree: CategoriesThree,
-	slug: string
+	CategoriesTree: CategoriesTree,
+	slug: string,
 ) {
 	const relatedCategories: number[] = [];
 
-	categoriesThree.map((category) => {
+	CategoriesTree.map((category) => {
 		if (category.slug === slug) {
 			relatedCategories.push(category.id);
 			category.children?.map((childrenCategory) => {
@@ -14,7 +14,8 @@ export default function findRelatedCategoriesIdBySlug(
 			});
 		} else {
 			category.children?.map((childrenCategory) => {
-				if (childrenCategory.slug === slug) relatedCategories.push(childrenCategory.id);
+				if (childrenCategory.slug === slug)
+					relatedCategories.push(childrenCategory.id);
 			});
 		}
 	});

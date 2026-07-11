@@ -24,7 +24,8 @@ export default function UseInfiniteScroll(
 		(pageIndex: number, prevPageData: any) => {
 			if (
 				prevPageData &&
-				(prevPageData.data?.length === 0 || (pageIndex > 0 && !prevPageData.data))
+				(prevPageData.data?.length === 0 ||
+					(pageIndex > 0 && !prevPageData.data))
 			) {
 				return null;
 			}
@@ -35,7 +36,7 @@ export default function UseInfiniteScroll(
 						pageIndex + 1
 					}&order=${priceSortOrder}`;
 				case "category":
-					return `/api/store/categories/getProductsInCategory/?page=${pageIndex + 1}&category=${
+					return `/api/store/categories/getProductsInCategories/?page=${pageIndex + 1}&slugs=${
 						opt.payload
 					}&order=${priceSortOrder}`;
 				case "search":
@@ -49,14 +50,19 @@ export default function UseInfiniteScroll(
 		[opt.action, opt.payload, priceSortOrder],
 	);
 
-	const { data, size, setSize, isLoading, isValidating } = useSWRInfinite(getSWRKey, fetcher, {
-		revalidateFirstPage: false,
-	});
+	const { data, size, setSize, isLoading, isValidating } = useSWRInfinite(
+		getSWRKey,
+		fetcher,
+		{
+			revalidateFirstPage: false,
+		},
+	);
 
 	const allProducts = data ? data.flatMap((page) => page.data) : [];
 
 	const isEmpty = data?.[0]?.data.length === 0;
-	const isReachingEnd = isEmpty || (data && data[data.length - 1]?.data.length < 10);
+	const isReachingEnd =
+		isEmpty || (data && data[data.length - 1]?.data.length < 10);
 	const isRefreshing = isValidating && data && data.length === size;
 
 	const loadMore = useCallback(() => {
@@ -69,7 +75,9 @@ export default function UseInfiniteScroll(
 		throttle(() => {
 			if (
 				window.innerHeight + document.documentElement.scrollTop >=
-				document.documentElement.offsetHeight - window.innerHeight - window.innerHeight * 2
+				document.documentElement.offsetHeight -
+					window.innerHeight -
+					window.innerHeight * 2
 			)
 				loadMore();
 		}, 500),
@@ -85,5 +93,11 @@ export default function UseInfiniteScroll(
 		setSize(1);
 	}, [priceSortOrder, setSize]);
 
-	return { priceSortOrder, setPriceSortOrder, isLoading, allProducts, isValidating };
+	return {
+		priceSortOrder,
+		setPriceSortOrder,
+		isLoading,
+		allProducts,
+		isValidating,
+	};
 }

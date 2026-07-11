@@ -29,7 +29,11 @@
 	--orange-color: #ff6d3a;
 	--blue-color: #35a2c1;
 	--red-color: #ff0000;
-	--background-gradient: linear-gradient(135deg, var(--foreground-color) 0%, #2a2a2a 100%);
+	--background-gradient: linear-gradient(
+		135deg,
+		var(--foreground-color) 0%,
+		#2a2a2a 100%
+	);
 
 	--transparent-dark-color: #20202040;
 	--transparent-light-color: #fafafa40;

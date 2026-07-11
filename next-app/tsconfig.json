@@ -1,48 +1,41 @@
 {
-  "compilerOptions": {
-    "target": "ES2017",
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
-    ],
-    "allowJs": true,
-    "skipLibCheck": true,
-    "strict": true,
-    "noEmit": true,
-    "esModuleInterop": true,
-    "module": "esnext",
-    "moduleResolution": "bundler",
-    "resolveJsonModule": true,
-    "isolatedModules": true,
-    "jsx": "preserve",
-    "incremental": true,
-    "plugins": [
-      {
-        "name": "next"
-      }
-    ],
-    "paths": {
-      "@/*": [
-        "./*"
-      ]
-    }
-  },
-  "include": [
-    "next-env.d.ts",
-    "**/*.ts",
-    "**/*.tsx",
-    ".next/types/**/*.ts",
-    "scripts/updateContent.js",
-    "scripts/utils/writeCategoriesThreeFile.js",
-    "scripts/utils/writeAllProductsFile.js",
-    "scripts/utils/loadCategories.js",
-    "scripts/utils/loadAllProducts.js",
-    "scripts/utils/generateCategoriesThree.js",
-    "scripts/utils/updateSitemap.js",
-    ".next/dev/types/**/*.ts"
-  ],
-  "exclude": [
-    "node_modules"
-  ]
+	"compilerOptions": {
+		"target": "ES2017",
+		"lib": ["dom", "dom.iterable", "esnext"],
+		"allowJs": true,
+		"skipLibCheck": true,
+		"strict": true,
+		"noEmit": true,
+		"esModuleInterop": true,
+		"module": "esnext",
+		"moduleResolution": "bundler",
+		"resolveJsonModule": true,
+		"isolatedModules": true,
+		"jsx": "preserve",
+		"incremental": true,
+		"plugins": [
+			{
+				"name": "next"
+			}
+		],
+		"paths": {
+			"@/*": ["./*"]
+		}
+	},
+	"include": [
+		"next-env.d.ts",
+		"**/*.ts",
+		"**/*.tsx",
+		".next/types/**/*.ts",
+		"scripts/updateContent.js",
+		"scripts/utils/writeCategoriesTreeFile.js",
+		"scripts/utils/writeAllProductsFile.js",
+		"scripts/utils/loadCategories.js",
+		"scripts/utils/loadAllProducts.js",
+		"scripts/utils/generateCategoriesTree.js",
+		"scripts/utils/updateSitemap.js",
+		".next/dev/types/**/*.ts",
+		"components/catalog/feeds/filters/CategoryNavigator.tsx"
+	],
+	"exclude": ["node_modules"]
 }

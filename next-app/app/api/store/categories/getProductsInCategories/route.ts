@@ -1,5 +1,5 @@
 import readAllProductsFile from "../../products/utils/readAllProductsFile";
-import readCategoriesThreeFile from "../utils/readCategoriesThreeFile";
+import readCategoriesThreeFile from "../utils/readCategoriesTreeFile";
 import { getQueries } from "@/app/api/utils/readQueries";
 import { Category, Product } from "@/types/productsType";
 
@@ -60,7 +60,7 @@ function isCarCategory(
 
 export async function GET(req: Request) {
 	const queries = getQueries(req.url);
-	const { category, page, order } = queries;
+	const { slugs, page, order } = queries;
 
 	const categoriesThree = await readCategoriesThreeFile();
 	const allProducts = (await readAllProductsFile())?.sort((a: any, b: any) =>
@@ -76,10 +76,9 @@ export async function GET(req: Request) {
 	const categoryMap = new Map<number, Category>();
 	allCategoriesFlat.forEach((cat) => categoryMap.set(cat.id, cat));
 
-	const categoriesIds = decodeURIComponent(category)
-		.split(",")
-		.map((item) => +item.trim())
-		.filter((id) => !isNaN(id));
+	const categoriesIds = allCategoriesFlat
+		.filter((c) => slugs.includes(decodeURIComponent(c.slug)))
+		.map((c) => c.id);
 
 	const expandedCategories = findAllChildrenCategories(
 		categoriesIds,

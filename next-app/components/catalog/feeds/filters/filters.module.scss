@@ -44,25 +44,26 @@
 			color: var(--foreground-color);
 			margin: 0;
 		}
+	}
 
-		.clearBtn {
-			font-size: 16px;
-			color: var(--orange-color);
-			background: none;
-			border: none;
-			cursor: pointer;
-			padding: 4px 8px;
-			border-radius: 4px;
-			transition: all 0.2s ease;
+	.clearBtn {
+		font-size: 16px;
+		margin-top: 10px;
+		color: var(--orange-color);
+		background: none;
+		border: none;
+		cursor: pointer;
+		padding: 4px 8px;
+		border-radius: 4px;
+		transition: all 0.2s ease;
 
-			&:hover:not(:disabled) {
-				background: rgba(255, 107, 0, 0.1);
-			}
+		&:hover:not(:disabled) {
+			background: rgba(255, 107, 0, 0.1);
+		}
 
-			&:disabled {
-				opacity: 0.3;
-				cursor: not-allowed;
-			}
+		&:disabled {
+			opacity: 0.3;
+			cursor: not-allowed;
 		}
 	}
 
