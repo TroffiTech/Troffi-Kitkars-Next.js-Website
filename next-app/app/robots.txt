@@ -1,6 +1,4 @@
 User-agent: *
 Allow: /*
-Allow: /catalog/product/*
 Disallow: /checkout/
-Disallow: /catalog/search/
 Sitemap: https://kitkars.ru/sitemap.xml

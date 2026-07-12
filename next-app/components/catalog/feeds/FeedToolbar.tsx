@@ -15,6 +15,19 @@ export default function FeedToolbar() {
 	const router = useRouter();
 	const route = useFeedQuery();
 
+	const setSearch = useCallback(
+		(search: string) => {
+			router.push(
+				buildRoute({
+					...route,
+					search,
+				}),
+				{ scroll: false },
+			);
+		},
+		[route, router],
+	);
+
 	const setOrder = useCallback(
 		(order: "increase" | "decrease") => {
 			router.push(
@@ -31,7 +44,7 @@ export default function FeedToolbar() {
 	return (
 		<div className={styles.topInner}>
 			<div className={styles.searchBar}>
-				<Search />
+				<Search value={route.search || ""} onSearch={setSearch} />
 			</div>
 
 			<div className={styles.sortInputs}>

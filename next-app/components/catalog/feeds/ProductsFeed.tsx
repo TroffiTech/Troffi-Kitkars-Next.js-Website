@@ -86,48 +86,6 @@ export function ProductsFeed() {
 	);
 }
 
-export function SearchFeed({ searchRequest }: { searchRequest: string }) {
-	const route = useFeedQuery();
-	const { isLoading, allProducts, isValidating } = UseInfiniteScroll(route);
-
-	return (
-		<div className={styles.defaultFeed_container}>
-			<div className={styles.topInner}>
-				<div className={styles.searchBar}>
-					<Search />
-				</div>
-			</div>
-			<h2
-				style={{
-					alignSelf: "start",
-					padding: "0 15px",
-				}}
-			>
-				Результаты поиска: <br />
-				&ldquo;{decodeURI(searchRequest)}&ldquo;
-			</h2>
-			<div className={styles.searchFeed}>
-				{isLoading &&
-					Array.from({ length: 12 }).map((_, index) => (
-						<ProductCardSkeleton key={index} />
-					))}
-				{allProducts.length > 0 &&
-					allProducts.map((product, index) => (
-						<FeedProductCard
-							key={`product-${product.id}-${index}`}
-							product={product}
-						/>
-					))}
-				{(isLoading || isValidating) &&
-					allProducts.length > 0 &&
-					Array.from({ length: 12 }).map((_, index) => (
-						<ProductCardSkeleton key={`loading-${index + 1}`} />
-					))}
-			</div>
-		</div>
-	);
-}
-
 export function SalesFeed() {
 	const [curPage, setCurPage] = useState(1);
 	const [priceSortOrder, setPriceSortOrder] = useState("increase");
