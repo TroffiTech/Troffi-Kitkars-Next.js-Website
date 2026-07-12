@@ -6,7 +6,11 @@ import SmallPopupProvider from "@/hooks/smallPopupsProvider";
 import ImageCarousel from "../shared/imageCarousel/imageCarusel";
 import { AddToCartButton } from "../catalog/cartButtons/cartButtons";
 
-export default function StaticDescription({ productData }: { productData: Product }) {
+export default function StaticDescription({
+	productData,
+}: {
+	productData: Product;
+}) {
 	function generateDescription(hmtlText: string) {
 		const description = { __html: hmtlText };
 		return <div dangerouslySetInnerHTML={description} />;
@@ -18,7 +22,11 @@ export default function StaticDescription({ productData }: { productData: Produc
 				<div className={styles.upperInner}>
 					<ImageCarousel images={productData.images} />
 				</div>
-				<div itemScope itemType="http://schema.org/Product" className={styles.lowerInner}>
+				<div
+					itemScope
+					itemType="http://schema.org/Product"
+					className={styles.lowerInner}
+				>
 					<div className={styles.categoriesString}>
 						{productData.categories.map((category) => (
 							<p key={category.id}>&gt;{category.name + " "}</p>
@@ -34,16 +42,14 @@ export default function StaticDescription({ productData }: { productData: Produc
 						itemType="http://schema.org/Offer"
 						className={styles.priceBlock}
 					>
-						{productData.sale_price ? (
+						{productData.sale_price ?
 							<>
 								<p className={styles.sale}>{productData.sale_price}</p>
 								<p className={styles.regular}>
 									<span itemProp="price">{productData.regular_price}</span> руб.
 								</p>
 							</>
-						) : (
-							<p itemProp="price">{productData.regular_price} руб.</p>
-						)}
+						:	<p itemProp="price">{productData.regular_price} руб.</p>}
 					</div>
 
 					<div className={styles.addToCartButton}>

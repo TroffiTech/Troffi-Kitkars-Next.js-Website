@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { createSeoContext } from "./createSeoContext";
-import { buildDescription, buildTitle } from "./buildSeo";
+import { buildCanonical, buildDescription, buildTitle } from "./buildSeo";
 
 type Props = {
 	params: Promise<{ slug?: string[] }>;
@@ -29,5 +29,8 @@ export async function generateMetadata({
 	return {
 		title: buildTitle(seo),
 		description: buildDescription(seo),
+		alternates: {
+			canonical: buildCanonical(seo),
+		},
 	};
 }

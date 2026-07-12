@@ -3,6 +3,7 @@ export type ImageType = {
 	alt: string;
 	name: string;
 	src: string;
+	url: string;
 };
 
 export type Product = {

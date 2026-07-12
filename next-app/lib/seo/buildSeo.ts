@@ -29,3 +29,18 @@ export function buildDescription(seo: SeoContext) {
 	}
 	return "Каталог внедорожного оборудования.";
 }
+
+export function buildCanonical(seo: SeoContext) {
+	const pathname = [seo.brand?.slug, ...seo.categories.map((c) => c.slug)]
+		.filter(Boolean)
+		.join("/");
+
+	const params = new URLSearchParams();
+	if (seo.models.length) {
+		params.set("model", seo.models.map((m) => m.slug).join(","));
+	}
+
+	const query = params.toString();
+
+	return `/${pathname}${query ? `?${query}` : ""}`;
+}
