@@ -1,18 +1,25 @@
-import SmallPopupProvider from "@/hooks/smallPopupsProvider";
+import type { Metadata } from "next";
+
+import { ProductsFeed } from "@/components/catalog/feeds/ProductsFeed";
+import Footer from "@/components/shared/footer/Footer";
+import Header from "@/components/shared/header/Header";
+import SideSlideWidget from "@/components/shared/sideSlideWidget/sideSlideWidget";
+
 import ModalDescriptionProvider from "@/hooks/modalDescriptionProvider";
 import ReduxStoreProvider from "@/hooks/reduxStoreProvider";
-import Header from "@/components/shared/header/Header";
-import { ProductsFeed } from "@/components/catalog/feeds/ProductsFeed";
-import SideSlideWidget from "@/components/shared/sideSlideWidget/sideSlideWidget";
-import Footer from "@/components/shared/footer/Footer";
+import SmallPopupProvider from "@/hooks/smallPopupsProvider";
 
-export default async function Category({
-	params,
-}: {
-	params: Promise<{ slug: string[] }>;
-}) {
-	const categoriesSlugs = (await params).slug.join(",");
+import { generateMetadata as createMetadata } from "@/lib/seo/generateMetadata";
 
+type PageProps = {
+	params: Promise<{ slug?: string[] }>;
+	searchParams: Promise<Record<string, string | string[] | undefined>>;
+};
+
+export const generateMetadata = (props: PageProps): Promise<Metadata> =>
+	createMetadata(props);
+
+export default function CatalogPage() {
 	return (
 		<main>
 			<section className="flex-box__column">

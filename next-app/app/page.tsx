@@ -9,6 +9,44 @@ import Footer from "@/components/shared/footer/Footer";
 import Tabs from "@/components/main/tabs/Tabs";
 import HeroSection from "@/components/main/heroSection/HeroSection";
 import SubcategoriesGrid from "@/components/main/subCategoriesGrid/SubCategoriesGrid";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+	metadataBase: new URL(process.env.DOMEN!),
+
+	title: {
+		default: process.env.SITE_NAME ?? "KITKARS.RU — внедорожное оборудование",
+		template: `%s | ${process.env.SITE_NAME ?? "KITKARS.RU"}`,
+	},
+
+	description:
+		"Внедорожное оборудование и аксессуары для азиатских автомобилей. Большой выбор силовых бамперов, багажников, защит, лебедок и аксессуаров.",
+
+	alternates: {
+		canonical: "/",
+	},
+
+	robots: {
+		index: true,
+		follow: true,
+	},
+
+	openGraph: {
+		type: "website",
+		locale: "ru_RU",
+		siteName: process.env.SITE_NAME,
+		title: process.env.SITE_NAME,
+		description:
+			"Внедорожное оборудование и аксессуары для азиатских автомобилей.",
+	},
+
+	twitter: {
+		card: "summary_large_image",
+		title: process.env.SITE_NAME,
+		description:
+			"Внедорожное оборудование и аксессуары для азиатских автомобилей.",
+	},
+};
 
 export default function Home() {
 	return (

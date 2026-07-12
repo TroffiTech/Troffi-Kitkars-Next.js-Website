@@ -3,23 +3,7 @@ import readCategoriesThreeFile from "../utils/readCategoriesTreeFile";
 import { getQueries } from "@/app/api/utils/readQueries";
 import { Category } from "@/types/productsType";
 import readBrandsTreeFile from "../utils/readBrandsTreeFile";
-
-function flattenCategories(categories: Category[]): Category[] {
-	const result: Category[] = [];
-
-	function walk(nodes: Category[]) {
-		for (const node of nodes) {
-			result.push(node);
-
-			if (node.children.length) {
-				walk(node.children);
-			}
-		}
-	}
-
-	walk(categories);
-	return result;
-}
+import flattenCategories from "../utils/flattenCategories";
 
 function collectChildren(
 	ids: number[],
