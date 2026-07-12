@@ -8,7 +8,6 @@ import { buildRoute } from "@/lib/routeParser";
 
 export default function BottomBar() {
 	const route = useFeedQuery();
-
 	const { data = [] } = useSWR<Category[]>(
 		route.brand ?
 			"/api/store/categories/getProductsCategories"

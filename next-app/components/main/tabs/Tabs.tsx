@@ -10,16 +10,6 @@ export default function Tabs() {
 	return (
 		<div className={styles.tabs}>
 			<div className={styles.tabs_head}>
-				{/* Managers are not ready to sales yet :((  */}
-				{/* <div
-              onClick={() => setTab("Выгодно")}
-              className={
-                tab === "Выгодно"
-                  ? styles.tabs_head_selector_selected
-                  : styles.tabs_head_selector
-            }>
-            Скидки
-            </div> */}
 				<div
 					onClick={() => setTab("Новинки")}
 					className={
@@ -32,7 +22,6 @@ export default function Tabs() {
 				</div>
 			</div>
 			<div className={styles.tabs_feed}>
-				{/* {tab === "Выгодно" && <HeroSaleFeed />} */}
 				{tab === "Новинки" && <HitsFeed />}
 			</div>
 		</div>
