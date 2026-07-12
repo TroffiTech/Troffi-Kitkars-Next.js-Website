@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import styles from "./Tabs.module.scss";
-import { HitsFeed } from "@/components/catalog/feeds/productsFeeds";
+import { HitsFeed } from "@/components/catalog/feeds/ProductsFeed";
 
 export default function Tabs() {
 	const [tab, setTab] = useState<"Выгодно" | "Новинки">("Новинки");
@@ -23,7 +23,9 @@ export default function Tabs() {
 				<div
 					onClick={() => setTab("Новинки")}
 					className={
-						tab === "Новинки" ? styles.tabs_head_selector_selected : styles.tabs_head_selector
+						tab === "Новинки" ?
+							styles.tabs_head_selector_selected
+						:	styles.tabs_head_selector
 					}
 				>
 					Новинки

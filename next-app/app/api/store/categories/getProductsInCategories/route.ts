@@ -1,132 +1,175 @@
 import readAllProductsFile from "../../products/utils/readAllProductsFile";
 import readCategoriesThreeFile from "../utils/readCategoriesTreeFile";
 import { getQueries } from "@/app/api/utils/readQueries";
-import { Category, Product } from "@/types/productsType";
+import { Category } from "@/types/productsType";
+import readBrandsTreeFile from "../utils/readBrandsTreeFile";
 
 function flattenCategories(categories: Category[]): Category[] {
 	const result: Category[] = [];
 
-	function traverse(cats: Category[]) {
-		for (const cat of cats) {
-			result.push(cat);
-			if (cat.children && cat.children.length > 0) {
-				traverse(cat.children);
+	function walk(nodes: Category[]) {
+		for (const node of nodes) {
+			result.push(node);
+
+			if (node.children.length) {
+				walk(node.children);
 			}
 		}
 	}
 
-	traverse(categories);
+	walk(categories);
 	return result;
 }
 
-function findAllChildrenCategories(
-	categoriesIds: number[],
+function collectChildren(
+	ids: number[],
 	categoryMap: Map<number, Category>,
 ): number[] {
-	const result = new Set<number>(categoriesIds);
-	const queue = [...categoriesIds];
+	const result = new Set(ids);
+	const queue = [...ids];
 
-	while (queue.length > 0) {
+	while (queue.length) {
 		const id = queue.shift()!;
 		const category = categoryMap.get(id);
 
-		if (category?.children) {
-			for (const child of category.children) {
-				if (!result.has(child.id)) {
-					result.add(child.id);
-					queue.push(child.id);
-				}
+		if (!category) continue;
+
+		for (const child of category.children) {
+			if (!result.has(child.id)) {
+				result.add(child.id);
+				queue.push(child.id);
 			}
 		}
 	}
 
-	return Array.from(result);
-}
-
-function isCarCategory(
-	categoryId: number,
-	categoryMap: Map<number, Category>,
-): boolean {
-	let current = categoryMap.get(categoryId);
-
-	while (current && current.parent !== 0) {
-		current = categoryMap.get(current.parent);
-	}
-
-	const result = current?.name === "Автомобили";
-
-	return result;
+	return [...result];
 }
 
 export async function GET(req: Request) {
-	const queries = getQueries(req.url);
-	const { slugs, page, order } = queries;
+	const query = getQueries(req.url);
+	const { brand, categories, models, page, order, search } = query;
 
-	const categoriesThree = await readCategoriesThreeFile();
-	const allProducts = (await readAllProductsFile())?.sort((a: any, b: any) =>
-		order === "increase" ? +a.price - +b.price : +b.price - +a.price,
-	);
+	const categoriesTree = await readCategoriesThreeFile();
+	const brandsTree = await readBrandsTreeFile();
+	const products = await readAllProductsFile();
 
-	if (!allProducts)
-		throw new Error("Endpoint: Failed to read AllProducts.json");
-	if (!categoriesThree)
-		throw new Error("Endpoint: Failed to read categoriesThree");
+	if (!categoriesTree) {
+		throw new Error("Failed to read categories tree");
+	}
 
-	const allCategoriesFlat = flattenCategories(categoriesThree);
-	const categoryMap = new Map<number, Category>();
-	allCategoriesFlat.forEach((cat) => categoryMap.set(cat.id, cat));
+	if (!brandsTree) {
+		throw new Error("Failed to read brands tree");
+	}
 
-	const categoriesIds = allCategoriesFlat
-		.filter((c) => slugs.includes(decodeURIComponent(c.slug)))
-		.map((c) => c.id);
+	if (!products) {
+		throw new Error("Failed to read products");
+	}
 
-	const expandedCategories = findAllChildrenCategories(
-		categoriesIds,
-		categoryMap,
-	);
+	const flatCategories = flattenCategories(categoriesTree);
+	const flatBrands = flattenCategories(brandsTree);
 
-	const carCategories: number[] = [];
-	const productCategories: number[] = [];
+	const slugMap = new Map<string, Category>();
 
-	for (const id of expandedCategories) {
-		if (isCarCategory(id, categoryMap)) {
-			carCategories.push(id);
-		} else {
-			productCategories.push(id);
+	for (const category of [...flatCategories, ...flatBrands]) {
+		slugMap.set(decodeURIComponent(category.slug), category);
+	}
+
+	let filteredProducts = [...products];
+
+	/**
+	 * BRAND
+	 */
+
+	if (brand) {
+		const brandCategory = slugMap.get(decodeURIComponent(brand));
+
+		if (brandCategory) {
+			filteredProducts = filteredProducts.filter((product) =>
+				product.categories.some(
+					(category: Category) => category.id === brandCategory.id,
+				),
+			);
 		}
 	}
 
-	const data: Product[] = [];
+	/**
+	 * MODELS
+	 */
 
-	for (const product of allProducts) {
-		const productCategoryIds = product.categories.map(
-			(category: Category) => category.id,
+	if (models.length) {
+		filteredProducts = filteredProducts.filter((product) => {
+			const matched = models.some((model) =>
+				product.categories.some(
+					(cat: Category) =>
+						decodeURIComponent(cat.slug).toLowerCase() ===
+							model.toLowerCase() ||
+						cat.name.toLowerCase() === model.toLowerCase(),
+				),
+			);
+
+			return matched;
+		});
+	}
+
+	/**
+	 * PRODUCT CATEGORIES
+	 */
+
+	if (categories.length) {
+		const categoryMap = new Map<number, Category>();
+
+		for (const category of flatCategories) {
+			categoryMap.set(category.id, category);
+		}
+
+		const selectedIds = categories
+			.map((slug) => slugMap.get(decodeURIComponent(slug))?.id)
+			.filter(Boolean) as number[];
+
+		const allowedIds = collectChildren(selectedIds, categoryMap);
+
+		filteredProducts = filteredProducts.filter((product) =>
+			product.categories.some((category: Category) =>
+				allowedIds.includes(category.id),
+			),
 		);
-
-		let carMatch = true;
-		if (carCategories.length > 0) {
-			carMatch = productCategoryIds.some((id: number) =>
-				carCategories.includes(id),
-			);
-		}
-
-		let productMatch = true;
-		if (productCategories.length > 0) {
-			productMatch = productCategoryIds.some((id: number) =>
-				productCategories.includes(id),
-			);
-		}
-
-		if (carMatch && productMatch) {
-			data.push(product);
-		}
 	}
 
-	return new Response(JSON.stringify(data.slice(+page * 12 - 12, +page * 12)), {
+	/**
+	 * SEARCH
+	 */
+
+	if (search) {
+		const request = search.toLowerCase();
+
+		filteredProducts = filteredProducts.filter((product) =>
+			product.name.toLowerCase().includes(request),
+		);
+	}
+
+	/**
+	 * SORT
+	 */
+
+	filteredProducts.sort((a, b) =>
+		order === "decrease" ? +b.price - +a.price : +a.price - +b.price,
+	);
+
+	/**
+	 * PAGINATION
+	 */
+
+	const pageSize = 12;
+	const currentPage = Number(page || 1);
+
+	const start = (currentPage - 1) * pageSize;
+	const end = start + pageSize;
+
+	return new Response(JSON.stringify(filteredProducts.slice(start, end)), {
+		status: 200,
 		headers: {
 			"content-type": "application/json",
-			"x-total-count": `${Math.ceil(data.length / 12)}`,
+			"x-total-count": String(Math.ceil(filteredProducts.length / pageSize)),
 		},
-		status: 200,
 	});
 }

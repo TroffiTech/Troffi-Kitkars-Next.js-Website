@@ -2,7 +2,7 @@ import SmallPopupProvider from "@/hooks/smallPopupsProvider";
 import ModalDescriptionProvider from "@/hooks/modalDescriptionProvider";
 import ReduxStoreProvider from "@/hooks/reduxStoreProvider";
 import Header from "@/components/shared/header/Header";
-import { CategoryFeed } from "@/components/catalog/feeds/productsFeeds";
+import { ProductsFeed } from "@/components/catalog/feeds/ProductsFeed";
 import SideSlideWidget from "@/components/shared/sideSlideWidget/sideSlideWidget";
 import Footer from "@/components/shared/footer/Footer";
 
@@ -20,7 +20,7 @@ export default async function Category({
 				<ReduxStoreProvider>
 					<SmallPopupProvider>
 						<ModalDescriptionProvider>
-							<CategoryFeed categoriesSlugs={categoriesSlugs} />
+							<ProductsFeed />
 						</ModalDescriptionProvider>
 					</SmallPopupProvider>
 					<SideSlideWidget />

@@ -2,7 +2,7 @@ import SmallPopupProvider from "@/hooks/smallPopupsProvider";
 import ModalDescriptionProvider from "@/hooks/modalDescriptionProvider";
 import ReduxStoreProvider from "@/hooks/reduxStoreProvider";
 import Header from "@/components/shared/header/Header";
-import { SearchFeed } from "@/components/catalog/feeds/productsFeeds";
+import { SearchFeed } from "@/components/catalog/feeds/ProductsFeed";
 import SideSlideWidget from "@/components/shared/sideSlideWidget/sideSlideWidget";
 import Footer from "@/components/shared/footer/Footer";
 

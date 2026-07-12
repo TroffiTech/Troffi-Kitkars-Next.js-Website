@@ -1,13 +1,26 @@
-export function getQueries(url: string) {
-    const queriesObj: { [key: string]: string } = {};
+export type ProductQueries = {
+	page: number;
+	order: "increase" | "decrease";
+	brand: string;
+	categories: string[];
+	models: string[];
+	search: string;
+};
 
-    const queriesArr = url.split("?")[1].split("&");
-    queriesArr.map((query) => {
-        const queryName = query.split("=")[0];
-        const queryValue = query.split("=")[1];
+export function getQueries(url: string): ProductQueries {
+	const params = new URL(url).searchParams;
 
-        queriesObj[queryName] = queryValue;
-    });
+	return {
+		page: Number(params.get("page") ?? 1),
 
-    return queriesObj;
+		order: (params.get("order") as "increase" | "decrease") ?? "increase",
+
+		brand: params.get("brand") ?? "",
+
+		categories: params.get("categories")?.split(",").filter(Boolean) ?? [],
+
+		models: params.get("models")?.split(",").filter(Boolean) ?? [],
+
+		search: params.get("search") ?? "",
+	};
 }

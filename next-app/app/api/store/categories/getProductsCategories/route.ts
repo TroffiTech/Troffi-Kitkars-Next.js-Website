@@ -2,9 +2,7 @@ import { Category } from "@/types/productsType";
 import readCategoriesTreeFile from "../utils/readCategoriesTreeFile";
 
 export async function GET() {
-	const productsCategories: Category[] = (
-		await readCategoriesTreeFile()
-	).filter((c: Category) => c.slug !== "avtomobily");
+	const productsCategories: Category[] = await readCategoriesTreeFile();
 
 	return new Response(JSON.stringify(productsCategories), {
 		headers: {

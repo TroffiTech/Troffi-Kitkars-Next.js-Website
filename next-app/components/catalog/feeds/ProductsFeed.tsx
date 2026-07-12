@@ -9,8 +9,7 @@ import CardReplacerFirstVariant, {
 } from "../productCards/replacerCards";
 import { LinkButton } from "@/components/shared/ctaButtons/ctaButtons";
 import UseInfiniteScroll, { fetcher } from "@/hooks/useInfiniteScroll";
-import SortOrderSelector from "./sortSelector/sortSelector";
-import styles from "./productFeeds.module.scss";
+import styles from "./ProductFeeds.module.scss";
 import { Product } from "@/types/productsType";
 import Paginator from "./paginator/paginator";
 import { RootState } from "@/store/store";
@@ -21,6 +20,8 @@ import {
 	ProductCardSkeleton,
 } from "../productCards/productCards";
 import FeedFilters from "./filters/FeedFilters";
+import { useFeedQuery } from "@/hooks/useFeedQuery";
+import FeedToolbar from "./FeedToolbar";
 
 function insertMockCardsInFeed(
 	data: Array<"firstFlag" | "secondFlag" | Product>,
@@ -32,65 +33,62 @@ function insertMockCardsInFeed(
 		.toSpliced(secondMockCardPosition, 0, "secondFlag");
 }
 
-export function CategoryFeed({
-	categoriesSlugs,
-}: {
-	categoriesSlugs: string | undefined;
-}) {
-	const {
-		priceSortOrder,
-		setPriceSortOrder,
-		isLoading,
-		allProducts,
-		isValidating,
-	} = UseInfiniteScroll({
-		action: "category",
-		payload: categoriesSlugs,
-	});
+type Props = {
+	products: Product[];
+	isLoading: boolean;
+	isValidating: boolean;
+};
+
+export default function ProductGrid({
+	products,
+	isLoading,
+	isValidating,
+}: Props) {
+	return (
+		<div className={styles.cards}>
+			{isLoading &&
+				Array.from({ length: 12 }).map((_, i) => (
+					<ProductCardSkeleton key={i} />
+				))}
+
+			{products.map((product) => (
+				<FeedProductCard key={product.id} product={product} />
+			))}
+
+			{(isLoading || isValidating) &&
+				products.length > 0 &&
+				Array.from({ length: 12 }).map((_, i) => (
+					<ProductCardSkeleton key={`loading-${i}`} />
+				))}
+		</div>
+	);
+}
+
+export function ProductsFeed() {
+	const route = useFeedQuery();
+
+	const { isLoading, allProducts, isValidating } = UseInfiniteScroll(route);
 
 	return (
 		<div className={styles.defaultFeed_container}>
-			<div className={styles.topInner}>
-				<div className={styles.searchBar}>
-					<Search />
-				</div>
-				<div className={styles.sortInputs}>
-					<SortOrderSelector
-						currentSortOrder={priceSortOrder}
-						sortOrderSetter={setPriceSortOrder}
-					/>
-				</div>
-			</div>
+			<FeedToolbar />
+
 			<div className={styles.defaultFeed}>
 				<FeedFilters />
-				<div className={styles.cards}>
-					{isLoading &&
-						Array.from({ length: 12 }).map((_, index) => (
-							<ProductCardSkeleton key={index} />
-						))}
-					{allProducts.length > 0 &&
-						allProducts.map((product, index) => (
-							<FeedProductCard
-								key={`product-${product.id}-${index + 1}`}
-								product={product}
-							/>
-						))}
-					{(isLoading || isValidating) &&
-						allProducts.length > 0 &&
-						Array.from({ length: 12 }).map((_, index) => (
-							<ProductCardSkeleton key={`loading-${index + 1}`} />
-						))}
-				</div>
+
+				<ProductGrid
+					products={allProducts}
+					isLoading={isLoading}
+					isValidating={isValidating}
+				/>
 			</div>
 		</div>
 	);
 }
 
 export function SearchFeed({ searchRequest }: { searchRequest: string }) {
-	const { isLoading, allProducts, isValidating } = UseInfiniteScroll({
-		action: "search",
-		payload: searchRequest,
-	});
+	const route = useFeedQuery();
+	const { isLoading, allProducts, isValidating } = UseInfiniteScroll(route);
 
 	return (
 		<div className={styles.defaultFeed_container}>
@@ -130,51 +128,6 @@ export function SearchFeed({ searchRequest }: { searchRequest: string }) {
 	);
 }
 
-export function DefaultFeed() {
-	const {
-		priceSortOrder,
-		setPriceSortOrder,
-		isLoading,
-		allProducts,
-		isValidating,
-	} = UseInfiniteScroll();
-
-	return (
-		<div className={styles.defaultFeed_container}>
-			<div className={styles.topInner}>
-				<div className={styles.searchBar}>
-					<Search />
-				</div>
-				<SortOrderSelector
-					currentSortOrder={priceSortOrder}
-					sortOrderSetter={setPriceSortOrder}
-				/>
-			</div>
-			<div className={styles.defaultFeed}>
-				<FeedFilters />
-				<div className={styles.cards}>
-					{isLoading &&
-						Array.from({ length: 12 }).map((_, index) => (
-							<ProductCardSkeleton key={index} />
-						))}
-					{allProducts.length > 0 &&
-						allProducts.map((product, index) => (
-							<FeedProductCard
-								key={`product-${product.id}-${index}`}
-								product={product}
-							/>
-						))}
-					{(isLoading || isValidating) &&
-						allProducts.length > 0 &&
-						Array.from({ length: 12 }).map((_, index) => (
-							<ProductCardSkeleton key={`loading-${index + 1}`} />
-						))}
-				</div>
-			</div>
-		</div>
-	);
-}
-
 export function SalesFeed() {
 	const [curPage, setCurPage] = useState(1);
 	const [priceSortOrder, setPriceSortOrder] = useState("increase");
@@ -187,13 +140,7 @@ export function SalesFeed() {
 	return (
 		<div className={styles.defaultFeed_container}>
 			<div className={styles.topInner}>
-				<div className={styles.searchBar}>
-					<Search />
-				</div>
-				<SortOrderSelector
-					currentSortOrder={priceSortOrder}
-					sortOrderSetter={setPriceSortOrder}
-				/>
+				<FeedToolbar />
 			</div>
 			<div className={styles.defaultFeed}>
 				{isLoading &&

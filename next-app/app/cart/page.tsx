@@ -1,7 +1,7 @@
 import SmallPopupProvider from "@/hooks/smallPopupsProvider";
 import ReduxStoreProvider from "@/hooks/reduxStoreProvider";
 import Header from "@/components/shared/header/Header";
-import { CartFeed } from "@/components/catalog/feeds/productsFeeds";
+import { CartFeed } from "@/components/catalog/feeds/ProductsFeed";
 import CookiePopup from "@/components/shared/popups/cookiePopup/cookiePopup";
 import Footer from "@/components/shared/footer/Footer";
 
