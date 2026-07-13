@@ -12,3 +12,4 @@
 # .env`s
 .env*
 next-env.d.ts
+*/.env*
