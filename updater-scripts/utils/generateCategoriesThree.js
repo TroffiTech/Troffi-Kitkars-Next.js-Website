@@ -1,31 +1,29 @@
-export default function generateCategoriesThree(allLoadedCategoriesData) {
-	console.info("generating categories three object");
-	const categoriesList = [];
+export function generateCategoriesTree(categoriesList) {
+	const categoryMap = new Map();
 
-	allLoadedCategoriesData.map((category) => {
-		categoriesList.push({
-			name: category.name,
-			slug: category.slug,
-			id: category.id,
-			parent: category.parent,
-			count: category.count,
+	for (const cat of categoriesList) {
+		categoryMap.set(cat.id, {
+			id: cat.id,
+			name: cat.name,
+			slug: cat.slug,
+			parent: cat.parent,
+			count: cat.count,
+			children: [],
 		});
-	});
+	}
 
-	const categoriesThree = [];
+	const roots = [];
 
-	categoriesList.map((category) => {
-		if (category.parent === 0 && category.count !== 0)
-			categoriesThree.push({ ...category, children: [] });
-	});
+	for (const [id, category] of categoryMap) {
+		if (category.parent === 0 && category.count !== 0) {
+			roots.push(category);
+		} else {
+			const parent = categoryMap.get(category.parent);
+			if (parent && parent.count !== 0) {
+				parent.children.push(category);
+			}
+		}
+	}
 
-	categoriesList.map((categoryInList) => {
-		categoriesThree.map((categoryInThree, index) => {
-			if (categoryInThree.id === categoryInList.parent && categoryInList.count !== 0)
-				categoriesThree[index].children?.push(categoryInList);
-		});
-	});
-
-	console.info("categories three are builded");
-	return categoriesThree;
+	return roots;
 }

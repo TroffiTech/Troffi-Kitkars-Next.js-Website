@@ -11,7 +11,7 @@ updater-scripts/
 │   ├── loadAllProducts.js
 │   ├── loadCategories.js
 │   ├── writeAllProductsFile.js
-│   ├── writeCategoriesThreeFile.js
+│   ├── writeCategoriesTreeFile.js
 │   ├── writeRobotsTxtFile.js
 │   ├── writeSitemapFile.js
 │   └── ...

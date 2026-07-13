@@ -3,6 +3,7 @@
 	"version": "1.0.0",
 	"description": "content updating system fot troffi next.js web sites",
 	"main": "updateContent.js",
+	"type": "module",
 	"scripts": {
 		"update": "node updateContent.js"
 	},
