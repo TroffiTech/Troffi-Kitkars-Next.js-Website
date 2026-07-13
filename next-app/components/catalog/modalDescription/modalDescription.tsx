@@ -55,12 +55,12 @@ function ModalDescriptionContent() {
 
 				<div className={styles.upperInner}>
 					<a
-						href={`${clientConfig.siteUrl || "https://kitkars.ru"}/catalog/product/${decodeURIComponent(productData.sku!)}`}
+						href={`${clientConfig.siteUrl || "https://kitkars.ru"}/product/${decodeURIComponent(productData.sku!)}`}
 						className={styles.productLink}
 						target="_blank"
 						rel="noopener noreferrer"
 					>
-						{`${clientConfig.siteUrl || "https://kitkars.ru"}/catalog/product/${decodeURIComponent(productData.sku!)}`}
+						{`${clientConfig.siteUrl || "https://kitkars.ru"}/product/${decodeURIComponent(productData.sku!)}`}
 					</a>
 					<ImageCarousel images={productData.images} />
 				</div>
