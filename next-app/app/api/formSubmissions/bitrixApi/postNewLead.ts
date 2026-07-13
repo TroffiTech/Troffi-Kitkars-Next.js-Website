@@ -1,7 +1,9 @@
+import { serverConfig } from "@/lib/config/server";
+
 export default async function postNewLead(leadData: string) {
 	try {
 		const res = await fetch(
-			`https://troffi.bitrix24.ru/rest/253/${process.env.BITRIX_KEY}/crm.lead.add.json/`,
+			`https://troffi.bitrix24.ru/rest/253/${serverConfig.bitixSecret}/crm.lead.add.json/`,
 			{
 				method: "post",
 				headers: {

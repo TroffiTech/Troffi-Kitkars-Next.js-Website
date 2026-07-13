@@ -1,3 +1,4 @@
+import { clientConfig } from "@/lib/config/client";
 import { ProductInCart } from "@/types/productsType";
 
 export function generateBitrixProductsFields(cart: ProductInCart[]) {
@@ -13,7 +14,7 @@ export function generateBitrixProductsFields(cart: ProductInCart[]) {
 	cart.map((item: ProductInCart) => {
 		bitrixProductRows.push({
 			PRODUCT_ID: item.id.toString(),
-			PRODUCT_NAME: `${process.env.DOMEN || "https://kitkars.ru"}/catalog/product/${decodeURIComponent(item.sku)}`,
+			PRODUCT_NAME: `${clientConfig.siteUrl || "https://kitkars.ru"}/catalog/product/${decodeURIComponent(item.sku)}`,
 			PRICE: item.price,
 			QUANTITY: item.quantity,
 		});

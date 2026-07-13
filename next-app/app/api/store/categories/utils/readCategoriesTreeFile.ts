@@ -1,8 +1,9 @@
+import { serverConfig } from "@/lib/config/server";
 import fs from "fs/promises";
 import path from "path";
 
 const CONTENT_PATH =
-	process.env.CONTENT_PATH || "/var/www/kitkars/content-data";
+	serverConfig.contentPath || "/var/www/kitkars/content-data";
 const CATEGORIES_FILE = "CategoriesTree.json";
 
 export default async function readCategoriesTreeFile() {

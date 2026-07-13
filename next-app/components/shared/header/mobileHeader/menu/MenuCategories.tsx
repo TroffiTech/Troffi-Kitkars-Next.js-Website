@@ -26,12 +26,6 @@ export default function MenuCategories() {
 		);
 	}
 
-	function getHref(category: Category) {
-		return buildRoute({
-			...route,
-			categories: [category.slug],
-		});
-	}
 	return (
 		<ul className={styles.menuPopup_innerContent_categories}>
 			{data &&

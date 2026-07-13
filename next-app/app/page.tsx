@@ -10,13 +10,15 @@ import Tabs from "@/components/main/tabs/Tabs";
 import HeroSection from "@/components/main/heroSection/HeroSection";
 import SubcategoriesGrid from "@/components/main/subCategoriesGrid/SubCategoriesGrid";
 import { Metadata } from "next";
+import { serverConfig } from "@/lib/config/server";
+import { clientConfig } from "@/lib/config/client";
 
 export const metadata: Metadata = {
-	metadataBase: new URL(process.env.DOMEN!),
+	metadataBase: new URL(clientConfig.siteUrl!),
 
 	title: {
-		default: process.env.SITE_NAME ?? "KITKARS.RU — внедорожное оборудование",
-		template: `%s | ${process.env.SITE_NAME ?? "KITKARS.RU"}`,
+		default: serverConfig.siteName ?? "KITKARS.RU — внедорожное оборудование",
+		template: `%s | ${serverConfig.siteName ?? "KITKARS.RU"}`,
 	},
 
 	description:
@@ -34,15 +36,15 @@ export const metadata: Metadata = {
 	openGraph: {
 		type: "website",
 		locale: "ru_RU",
-		siteName: process.env.SITE_NAME,
-		title: process.env.SITE_NAME,
+		siteName: serverConfig.siteName,
+		title: serverConfig.siteName,
 		description:
 			"Внедорожное оборудование и аксессуары для азиатских автомобилей.",
 	},
 
 	twitter: {
 		card: "summary_large_image",
-		title: process.env.SITE_NAME,
+		title: serverConfig.siteName,
 		description:
 			"Внедорожное оборудование и аксессуары для азиатских автомобилей.",
 	},

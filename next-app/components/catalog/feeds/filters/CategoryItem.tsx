@@ -5,7 +5,7 @@ import { type ChangeEvent, type MouseEvent, useState } from "react";
 import { Category } from "@/types/productsType";
 import { arrowDownMiniSVG } from "@/components/shared/icons/icons";
 
-import styles from "./filters.module.scss";
+import styles from "./Filters.module.scss";
 
 type CategoryItemProps = {
 	category: Category;

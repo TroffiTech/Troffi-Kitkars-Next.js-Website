@@ -5,6 +5,7 @@ export type ProductQueries = {
 	categories: string[];
 	models: string[];
 	search: string;
+	sku: string;
 };
 
 export function getQueries(url: string): ProductQueries {
@@ -22,5 +23,7 @@ export function getQueries(url: string): ProductQueries {
 		models: params.get("models")?.split(",").filter(Boolean) ?? [],
 
 		search: params.get("search") ?? "",
+
+		sku: params.get("sku") ?? "",
 	};
 }

@@ -35,7 +35,7 @@ export const brandsCards = [
 		image: "/brandLogos/baic.png",
 	},
 	{
-		slug: "great-wall",
+		slug: "great_wall",
 		name: "Great Wall",
 		image: "/brandLogos/gwm.png",
 	},
@@ -48,5 +48,10 @@ export const brandsCards = [
 		slug: "jmc",
 		name: "JMC",
 		image: "/brandLogos/jmc.png",
+	},
+	{
+		slug: "haval",
+		name: "Haval",
+		image: "/brandLogos/haval.png",
 	},
 ];

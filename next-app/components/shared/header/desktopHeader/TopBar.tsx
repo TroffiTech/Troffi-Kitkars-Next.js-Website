@@ -9,7 +9,7 @@ export default function TopBar() {
 		<nav className={styles.header_topInner}>
 			<Logo />
 			<ul className={styles.header_infoLinks}>
-				{infoLinks.map((infoLink, index) => (
+				{infoLinks.map((infoLink) => (
 					<li key={infoLink.link}>
 						<Link href={infoLink.link}>{infoLink.name}</Link>
 					</li>

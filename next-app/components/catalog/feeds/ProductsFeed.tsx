@@ -13,7 +13,6 @@ import styles from "./ProductFeeds.module.scss";
 import { Product } from "@/types/productsType";
 import Paginator from "./paginator/paginator";
 import { RootState } from "@/store/store";
-import Search from "../searchBar/Search";
 import {
 	CartProductCard,
 	FeedProductCard,
@@ -72,10 +71,8 @@ export function ProductsFeed() {
 	return (
 		<div className={styles.defaultFeed_container}>
 			<FeedToolbar />
-
 			<div className={styles.defaultFeed}>
 				<FeedFilters />
-
 				<ProductGrid
 					products={allProducts}
 					isLoading={isLoading}
@@ -88,7 +85,7 @@ export function ProductsFeed() {
 
 export function SalesFeed() {
 	const [curPage, setCurPage] = useState(1);
-	const [priceSortOrder, setPriceSortOrder] = useState("increase");
+	const [priceSortOrder] = useState("increase");
 
 	const { data, isLoading } = useSWR(
 		`/api/store/products/getAllOnSaleProducts/?page=${curPage}&order=${priceSortOrder}`,

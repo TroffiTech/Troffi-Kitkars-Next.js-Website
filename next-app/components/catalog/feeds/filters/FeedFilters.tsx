@@ -6,7 +6,7 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import CarModelsFilter from "./CarModelsFilter";
 import CategoryFilter from "./CategoryNavigator";
 
-import styles from "./filters.module.scss";
+import styles from "./Filters.module.scss";
 import { buildRoute, parseRoute } from "@/lib/routeParser";
 
 export default function FeedFilters() {
@@ -54,13 +54,14 @@ export default function FeedFilters() {
 				brand,
 				categories: [],
 				models: [],
+				order: "increase",
 			}),
 			{ scroll: false },
 		);
 	}, [brand, router]);
 
 	return (
-		<div className={styles.filters}>
+		<div className={styles.filtersContainer}>
 			<CarModelsFilter
 				brand={brand}
 				selectedModels={models}

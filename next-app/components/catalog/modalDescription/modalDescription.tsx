@@ -7,6 +7,7 @@ import { ModalDescriptionContext } from "@/hooks/modalDescriptionProvider";
 import { AddToCartButton } from "../cartButtons/cartButtons";
 import { arrowRightSVG } from "@/components/shared/icons/icons";
 import ImageCarousel from "@/components/shared/imageCarousel/imageCarusel";
+import { clientConfig } from "@/lib/config/client";
 
 function ModalDescriptionContent() {
 	const isVisible = useContext(ModalDescriptionContext).isVisible;
@@ -54,17 +55,21 @@ function ModalDescriptionContent() {
 
 				<div className={styles.upperInner}>
 					<a
-						href={`${process.env.DOMEN || "https://kitkars.ru"}/catalog/product/${decodeURIComponent(productData.sku!)}`}
+						href={`${clientConfig.siteUrl || "https://kitkars.ru"}/catalog/product/${decodeURIComponent(productData.sku!)}`}
 						className={styles.productLink}
 						target="_blank"
 						rel="noopener noreferrer"
 					>
-						{`${process.env.DOMEN || "https://kitkars.ru"}/catalog/product/${decodeURIComponent(productData.sku!)}`}
+						{`${clientConfig.siteUrl || "https://kitkars.ru"}/catalog/product/${decodeURIComponent(productData.sku!)}`}
 					</a>
 					<ImageCarousel images={productData.images} />
 				</div>
 
-				<div itemScope itemType="http://schema.org/Product" className={styles.lowerInner}>
+				<div
+					itemScope
+					itemType="http://schema.org/Product"
+					className={styles.lowerInner}
+				>
 					<div className={styles.categoriesString}>
 						{productData.categories.map((category) => (
 							<p key={category.id}>&gt;{category.name + " "}</p>

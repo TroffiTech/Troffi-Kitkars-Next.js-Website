@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import styles from "./MenuPopup.module.scss";
 import MenuCategories from "./MenuCategories";
 import MenuInfo from "./MenuInfo";
@@ -28,7 +28,9 @@ export function MenuPopup({ isOpen }: { isOpen: boolean }) {
 			className={`${styles.menuPopup} ${isOpen ? styles.menuEnter : styles.menuExit}`}
 		>
 			<div className={styles.menuPopup_innerContent}>
-				<MenuCategories />
+				<Suspense fallback={null}>
+					<MenuCategories />
+				</Suspense>
 				<MenuInfo />
 				<MenuContacts />
 			</div>

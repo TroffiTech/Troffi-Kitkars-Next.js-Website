@@ -3,13 +3,13 @@ import Footer from "@/components/shared/footer/Footer";
 import Header from "@/components/shared/header/Header";
 
 export default function NotFoundPage() {
-    return (
-        <main>
-            <section className='flex-box__column'>
-                <Header />
-                <NotFoundInfo />
-                <Footer />
-            </section>
-        </main>
-    );
+	return (
+		<main>
+			<section className="flex-box__column">
+				<Header />
+				<NotFoundInfo />
+				<Footer />
+			</section>
+		</main>
+	);
 }

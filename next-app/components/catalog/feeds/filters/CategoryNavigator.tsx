@@ -9,7 +9,7 @@ import CategoryItem from "./CategoryItem";
 import { buildCategoryMaps } from "./helpers/categoryMaps";
 import { toggleCategorySelection } from "./helpers/categorySelection";
 
-import styles from "./filters.module.scss";
+import styles from "./Filters.module.scss";
 import { fetcher } from "./helpers/fetcher";
 
 type CategoryFilterProps = {

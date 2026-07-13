@@ -3,9 +3,10 @@ import type { MetadataRoute } from "next";
 import flattenCategories from "@/app/api/store/categories/utils/flattenCategories";
 import readBrandsTreeFile from "@/app/api/store/categories/utils/readBrandsTreeFile";
 import readCategoriesTreeFile from "@/app/api/store/categories/utils/readCategoriesTreeFile";
+import { clientConfig } from "@/lib/config/client";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-	const site = process.env.DOMEN!;
+	const site = clientConfig.siteUrl!;
 
 	const brands = flattenCategories(await readBrandsTreeFile());
 	const categories = flattenCategories(await readCategoriesTreeFile());

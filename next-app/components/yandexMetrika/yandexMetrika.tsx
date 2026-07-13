@@ -2,6 +2,7 @@
 
 import { useEffect } from "react";
 import { usePathname, useSearchParams } from "next/navigation";
+import { clientConfig } from "@/lib/config/client";
 
 declare global {
 	interface Window {
@@ -14,7 +15,7 @@ export function YandexMetrica() {
 	const searchParams = useSearchParams();
 
 	useEffect(() => {
-		const counterId = Number(process.env.NEXT_PUBLIC_YANDEX_METRIKA_ID);
+		const counterId = Number(clientConfig.metrikaId);
 
 		if (!counterId) return;
 
@@ -46,7 +47,7 @@ export function YandexMetrica() {
 	}, []);
 
 	useEffect(() => {
-		const counterId = Number(process.env.NEXT_PUBLIC_YANDEX_METRIKA_ID);
+		const counterId = Number(clientConfig.metrikaId);
 		if (!counterId || !window.ym) return;
 
 		const url =

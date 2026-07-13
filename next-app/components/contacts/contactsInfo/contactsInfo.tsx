@@ -1,3 +1,4 @@
+import { serverConfig } from "@/lib/config/server";
 import styles from "./contactsInfo.module.scss";
 import { contactsData } from "@/components/contactsData";
 
@@ -13,7 +14,7 @@ export default function ContactsInfo() {
 				</ul>
 			))}
 			<h2>Адрес:</h2>
-			<p>{process.env.ADDRESS || "Ижевск, пер.Спартаковский, д. 8"}</p>
+			<p>{serverConfig.address || "Ижевск, пер.Спартаковский, д. 8"}</p>
 
 			<h2>Реквизиты компании ООО «ВИП»</h2>
 			<p>

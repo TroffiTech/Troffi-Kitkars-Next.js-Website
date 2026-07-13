@@ -1,6 +1,7 @@
 import Link from "next/link";
 import styles from "./MenuPopup.module.scss";
 import CallBackButton from "@/components/shared/ctaButtons/ctaButtons";
+import { serverConfig } from "@/lib/config/server";
 
 export default function MenuContacts() {
 	return (
@@ -11,10 +12,10 @@ export default function MenuContacts() {
 			</div>
 			<Link
 				className={styles.menuPopup_innerContent_contacts_phoneNumber}
-				href={`tel: ${process.env.MAIN_TEL}`}
+				href={`tel: ${serverConfig.mainTel}`}
 				onClick={() => document.body.classList.remove("blockScroll")}
 			>
-				{process.env.MAIN_TEL}
+				{serverConfig.mainTel}
 			</Link>
 			<CallBackButton text="Заказать звонок" />
 		</div>

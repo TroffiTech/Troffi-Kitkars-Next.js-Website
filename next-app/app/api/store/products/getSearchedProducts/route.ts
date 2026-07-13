@@ -4,7 +4,7 @@ import fuzzySearch from "../utils/fuzzySearch";
 export async function GET(req: Request) {
 	const queries = getQueries(req.url);
 	const page: number = +queries.page;
-	const searchQuery: string = decodeURI(queries.request);
+	const searchQuery: string = decodeURI(queries.search);
 
 	const data = await fuzzySearch(searchQuery);
 

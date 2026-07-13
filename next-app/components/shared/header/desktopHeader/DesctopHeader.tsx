@@ -1,7 +1,7 @@
 "use client";
 
 import styles from "./DesctopHeader.module.scss";
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import TopBar from "./TopBar";
 import BottomBar from "./BottomBar";
 
@@ -19,7 +19,9 @@ export default function DesctopHeader() {
 	return (
 		<header className={`${styles.header} ${isScrolled ? styles.scrolled : ""}`}>
 			<TopBar />
-			<BottomBar />
+			<Suspense fallback={null}>
+				<BottomBar />
+			</Suspense>
 		</header>
 	);
 }

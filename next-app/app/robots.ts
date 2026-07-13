@@ -1,3 +1,4 @@
+import { clientConfig } from "@/lib/config/client";
 import type { MetadataRoute } from "next";
 
 export default function robots(): MetadataRoute.Robots {
@@ -7,7 +8,7 @@ export default function robots(): MetadataRoute.Robots {
 			allow: "/",
 			disallow: "/checkout",
 		},
-		sitemap: `${process.env.DOMEN}/sitemap.xml`,
-		host: process.env.DOMEN,
+		sitemap: `${clientConfig.siteUrl}/sitemap.xml`,
+		host: clientConfig.siteUrl,
 	};
 }
