@@ -2,16 +2,22 @@ import { useContext } from "react";
 
 import styles from "./productCards.module.scss";
 import { ModalDescriptionContext } from "@/hooks/modalDescriptionProvider";
-import { AddToCartButton, RemoveFromCartButton } from "../cartButtons/cartButtons";
+import {
+	AddToCartButton,
+	RemoveFromCartButton,
+} from "../cartButtons/cartButtons";
 import Counter from "./counter/counter";
 import { Product, ProductInCart } from "@/types/productsType";
 import Image from "next/image";
 
 export function FeedProductCard({ product }: { product: Product }) {
-	const setIsDescriptionVisible = useContext(ModalDescriptionContext).setIsVisible;
+	const setIsDescriptionVisible = useContext(
+		ModalDescriptionContext,
+	).setIsVisible;
 	const setProductData = useContext(ModalDescriptionContext).setProductData;
 
-	const { attributes, images, name, sku, regular_price, sale_price, status } = product;
+	const { attributes, images, name, sku, regular_price, sale_price, status } =
+		product;
 	if (status !== "publish") return;
 	if (!images[0]) return;
 
@@ -22,7 +28,11 @@ export function FeedProductCard({ product }: { product: Product }) {
 	}
 
 	return (
-		<div itemScope itemType="http://schema.org/Product" className={styles.feedProductCard}>
+		<div
+			itemScope
+			itemType="http://schema.org/Product"
+			className={styles.feedProductCard}
+		>
 			{sale_price && <div className={styles.saleBadge}>% Скидки</div>}
 			<div className={styles.imageContainer}>
 				<Image
@@ -82,7 +92,9 @@ export function CartProductCard({ product }: { product: ProductInCart }) {
 			</div>
 			<h3 className={styles.name}>{product.name}</h3>
 			<Counter product={product} />
-			<p className={styles.price}>{product.quantity * +product.price + " руб."}</p>
+			<p className={styles.price}>
+				{product.quantity * +product.price + " руб."}
+			</p>
 
 			<RemoveFromCartButton productData={product} />
 		</div>
