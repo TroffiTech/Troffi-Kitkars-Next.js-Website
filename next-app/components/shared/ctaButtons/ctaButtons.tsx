@@ -39,17 +39,21 @@ interface LinkButtonProps {
 	variant?: "default" | "dark";
 }
 
-export function LinkButton({ link, text, variant = "default" }: LinkButtonProps) {
+export function LinkButton({
+	link,
+	text,
+	variant = "default",
+}: LinkButtonProps) {
 	const containerClass =
-		variant === "dark"
-			? `${styles.linkButton_container} ${styles.linkButton_dark}`
-			: styles.linkButton_container;
+		variant === "dark" ?
+			`${styles.linkButton_container} ${styles.linkButton_dark}`
+		:	styles.linkButton_container;
 
 	return (
-		<div className={containerClass}>
-			<Link className={styles.linkButton} href={link}>
-				{text}
-			</Link>
-		</div>
+		<Link href={link}>
+			<div className={containerClass}>
+				<div className={styles.linkButton}>{text}</div>
+			</div>
+		</Link>
 	);
 }
