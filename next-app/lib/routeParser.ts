@@ -49,5 +49,5 @@ export function buildRoute({
 	if (order === "decrease") {
 		params.set("order", "decrease");
 	}
-	return `${pathname}${params.toString() ? `?${params}` : ""}`;
+	return `${pathname}${params.toString() ? `?${params}` : `catalog`}`;
 }
