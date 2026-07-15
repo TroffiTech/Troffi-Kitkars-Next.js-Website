@@ -160,20 +160,20 @@
 		}
 
 		.upperInner {
-			padding: 80px 40px 40px 40px;
+			padding: 40px 40px 40px 40px;
 			@include flex-col(2rem, center, flex-start);
 			height: 100vh;
 			overflow-y: auto;
 			background: rgba(255, 255, 255, 0.02);
 
 			@media (max-width: 900px) {
-				height: auto;
-				max-height: 50vh;
-				padding: 70px 20px 20px 20px;
+				height: fit-content;
+				padding: 30px 20px 20px 20px;
 			}
 
 			.productLink {
-				width: 100%;
+				// width: 100%;
+				align-self: flex-end;
 				color: var(--orange-color);
 				text-decoration: none;
 				font-size: 0.9rem;

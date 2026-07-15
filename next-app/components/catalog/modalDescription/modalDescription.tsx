@@ -60,7 +60,7 @@ function ModalDescriptionContent() {
 						target="_blank"
 						rel="noopener noreferrer"
 					>
-						{`${clientConfig.siteUrl || "https://kitkars.ru"}/product/${decodeURIComponent(productData.sku!)}`}
+						Перейти на страницу товара
 					</a>
 					<ImageCarousel images={productData.images} />
 				</div>
