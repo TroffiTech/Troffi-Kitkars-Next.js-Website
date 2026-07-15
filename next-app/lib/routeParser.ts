@@ -37,7 +37,10 @@ export function buildRoute({
 	search,
 	order,
 }: ParsedRoute) {
-	const pathname = "/" + [brand, ...categories].filter(Boolean).join("/");
+	const pathname =
+		!brand && !categories.length ?
+			"/catalog"
+		:	"/" + [brand, ...categories].filter(Boolean).join("/");
 	const params = new URLSearchParams();
 
 	if (models.length) {
@@ -49,5 +52,5 @@ export function buildRoute({
 	if (order === "decrease") {
 		params.set("order", "decrease");
 	}
-	return `${pathname}${params.toString() ? `?${params}` : `catalog`}`;
+	return `${pathname}${params.toString() ? `?${params}` : ""}`;
 }
