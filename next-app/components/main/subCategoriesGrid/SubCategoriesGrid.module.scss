@@ -36,7 +36,9 @@
 	cursor: pointer;
 	overflow: hidden;
 	transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-	box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+	box-shadow:
+		0 8px 32px rgba(0, 0, 0, 0.2),
+		inset 0 1px 0 rgba(255, 255, 255, 0.1);
 
 	// Градиентный оверлей для изображений
 	&::before {
@@ -65,7 +67,12 @@
 		left: -2px;
 		right: -2px;
 		bottom: -2px;
-		background: linear-gradient(45deg, var(--orange-color), transparent, var(--orange-color));
+		background: linear-gradient(
+			45deg,
+			var(--orange-color),
+			transparent,
+			var(--orange-color)
+		);
 		border-radius: 18px;
 		z-index: -1;
 		opacity: 0;
@@ -75,7 +82,9 @@
 	&:hover {
 		transform: translateY(-8px) scale(1.02);
 		border-color: rgba(255, 107, 0, 0.4);
-		box-shadow: 0 20px 40px rgba(255, 107, 0, 0.25), 0 8px 32px rgba(0, 0, 0, 0.3),
+		box-shadow:
+			0 20px 40px rgba(255, 107, 0, 0.25),
+			0 8px 32px rgba(0, 0, 0, 0.3),
 			inset 0 1px 0 rgba(255, 255, 255, 0.2);
 
 		&::before {
@@ -168,36 +177,36 @@
 }
 
 // Стили для последней карточки (каталог)
-.grid_card:last-child {
-	background: linear-gradient(135deg, var(--foreground-color) 0%, #2a2a2a 100%);
-	border: 1px solid rgba(255, 107, 0, 0.3);
+// .grid_card:last-child {
+// 	background: linear-gradient(135deg, var(--foreground-color) 0%, #2a2a2a 100%);
+// 	border: 1px solid rgba(255, 107, 0, 0.3);
 
-	.catalog_content {
-		height: 100%;
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-		justify-content: center;
-		text-align: center;
-		gap: 1.5rem;
-	}
+// 	.catalog_content {
+// 		height: 100%;
+// 		display: flex;
+// 		flex-direction: column;
+// 		align-items: center;
+// 		justify-content: center;
+// 		text-align: center;
+// 		gap: 1.5rem;
+// 	}
 
-	h3 {
-		font-size: 1.3rem;
-		color: var(--orange-color);
-		max-width: 180px;
-		text-align: center;
-		margin-bottom: 0;
-	}
+// 	h3 {
+// 		font-size: 1.3rem;
+// 		color: var(--orange-color);
+// 		max-width: 180px;
+// 		text-align: center;
+// 		margin-bottom: 0;
+// 	}
 
-	&:hover {
-		background: linear-gradient(135deg, #2a2a2a 0%, var(--foreground-color) 100%);
+// 	&:hover {
+// 		background: linear-gradient(135deg, #2a2a2a 0%, var(--foreground-color) 100%);
 
-		h3 {
-			transform: scale(1.05);
-		}
-	}
-}
+// 		h3 {
+// 			transform: scale(1.05);
+// 		}
+// 	}
+// }
 
 // Анимации
 @keyframes fadeInUp {
