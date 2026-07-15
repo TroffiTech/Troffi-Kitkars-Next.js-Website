@@ -14,7 +14,9 @@ export function AddToCartButton({ productData }: { productData: Product }) {
 	const cart = useSelector((state: RootState) => state.cart.value);
 
 	useEffect(() => {
-		const selectedProduct = cart.filter((item) => item.sku === productData.sku)[0];
+		const selectedProduct = cart.filter(
+			(item) => item.sku === productData.sku,
+		)[0];
 		if (!selectedProduct) return;
 		else setIsProductInCart(true);
 		// eslint-disable-next-line react-hooks/exhaustive-deps
@@ -47,7 +49,11 @@ export function AddToCartButton({ productData }: { productData: Product }) {
 	);
 }
 
-export function RemoveFromCartButton({ productData }: { productData: Product }) {
+export function RemoveFromCartButton({
+	productData,
+}: {
+	productData: Product;
+}) {
 	const dispatch = useDispatch();
 
 	const setIsPopupVisible = useContext(SmallPopupContext).setIsVisible;
